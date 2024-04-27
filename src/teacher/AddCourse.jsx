@@ -191,28 +191,26 @@ function AddCourse() {
     return (
         <form onSubmit={submit}>
             <Home />
-            <div className='flex justify-around items-center mx-5 mt-5'>
-                <div>
-                    <p className='text-3xl font-bold'>Course Setup</p>
-                </div>
+            <div className='flex-layout'>
+                <p className='text-3xl font-bold'>Course Setup</p>
                 
-                <div className='flex'>
+                <div className='flex justify-center'>
                     <button onClick={submit} style={{display: 'flex', alignItems: 'center'}} className='border border-purple-500 hover:bg-purple-100 font-bold my-4 py-2 mx-2 px-4 rounded'><MdPublish className='text-xl' /><p>Save as Draft</p></button>
                     <button onClick={submit} style={{display: 'flex', alignItems: 'center'}} className='bg-purple-500 hover:bg-purple-700 text-white font-bold my-4 py-2 mx-2 px-4 rounded'><MdPublish className='text-xl' /><p>Publish</p></button>
                 </div>
             </div>
 
             {err &&
-                <div className='w-2/6 mx-auto my-3'>
+                <div className='w-80 lg:w-2/6 mx-auto my-2'>
                     <Alert icon={<CheckIcon fontSize="inherit" />} severity="error">
                         <p className='font-bold' >{err}</p>
                     </Alert>
                 </div>
             }
             
-            <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', maxWidth: '1200px', margin: '0 auto'}}>
-                <div className='w-full mx-auto'>
-                    <div className='bg-purple-100 p-5 rounded w-5/6 my-5 mx-auto shadow-xl'>
+            <div className='grid-layout-2'>
+                <div className='w-5/6 mx-auto'>
+                    <div className='bg-purple-100 p-5 rounded w-6/6 lg:w-5/6 my-5 mx-auto shadow-xl'>
                         <div className='flex justify-between items-center'>
                             <p className='block text-lg font-bold text-gray-700 mb-3'>Course Title</p>
                             {editTitle ?
@@ -231,7 +229,7 @@ function AddCourse() {
                         }
                     </div>
                     
-                    <div className='bg-purple-100 p-5 rounded w-5/6 my-5 mx-auto shadow-xl'>
+                    <div className='bg-purple-100 p-5 rounded w-6/6 lg:w-5/6 my-5 mx-auto shadow-xl'>
                         <div className='flex justify-between items-center'>
                             <p className='block text-lg font-bold text-gray-700 mb-3'>Course Description</p>
                             {editDesc ?
@@ -244,25 +242,25 @@ function AddCourse() {
                             }
                         </div>
                         {editDesc ?
-                            <textarea name="description" cols="50" rows="4" className='block border border-gray-300 w-6/6 mx-auto rounded-md p-3 text-md' value={desc} onChange={(e) => setDesc(e.target.value)} placeholder='Enter Course description here...'></textarea>
+                            <input type="text" name="description" className='block border border-gray-300 w-5/6 mx-auto rounded-md p-3 text-md' value={desc} onChange={(e) => setDesc(e.target.value)} placeholder='Enter Course description here...' />
                             :
                             <p className='block text-lg font-bold text-gray-500 my-3 text-center px-3'>{desc.length > 0 ? desc.slice(0, 120)+'....' : desc}</p>
                         }
                         
                     </div>
                     
-                    <div className='bg-purple-100 p-5 block border border-gray-300 rounded text-sm w-5/6 my-5 mx-auto shadow-xl'>
-                        <div className='flex justify-between items-center'>
+                    <div className='bg-purple-100 p-5 block border border-gray-300 rounded text-sm w-6/6 lg:w-5/6 my-5 mx-auto shadow-xl'>
+                        <div className='block'>
                             <p className='block text-lg font-bold text-gray-700 mb-3'>Course Thumbnail</p>
-                            <div className='flex justify-end'>
+                            <div className='flex justify-center'>
                                 <input type="file" name='image' ref={imageInputRef} onChange={handleImageChange} className='text-md font-semibold text-gray-700 mb-3 gap-1' />
                             </div>
                         </div>
                         {viewImage ?
                             <div>
-                            <img src={viewImage} alt="Preview" style={{ maxWidth: '300px', maxHeight: '200px', margin: "20px auto", borderRadius: '10px' }} />
+                            <img src={viewImage} alt="Preview" className='storage-prop' />
                             </div>:
-                            <div style={{ width: '300px', height: '200px', margin: '20px auto', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', border: '1px solid #a855f7', borderRadius: '10px' }}>
+                            <div className='alter-prop'>
                                 <CiCamera className='text-2xl' />
                                 <p className='text-lg'>No Image Uploaded</p>
                             </div>
@@ -270,8 +268,8 @@ function AddCourse() {
                     </div>
                 </div>
                 
-                <div className='w-full mx-auto'>
-                    <div className='bg-purple-100 rounded w-5/6 my-5 mx-auto shadow-xl p-5'>
+                <div className='w-5/6 mx-auto'>
+                    <div className='bg-purple-100 rounded w-6/6 lg:w-5/6 my-5 mx-auto shadow-xl p-5'>
                         <div className='flex justify-between items-center'>
                             <p className='block text-lg font-bold text-gray-700 mb-3'>Course Price</p>
                             {editPrice ?
@@ -290,18 +288,18 @@ function AddCourse() {
                         }
                     </div>
 
-                    <div className='bg-purple-100 rounded block border border-gray-300 text-sm w-5/6 my-5 mx-auto shadow-xl p-5'>
-                        <div className='flex justify-between items-center'>
+                    <div className='bg-purple-100 rounded block border border-gray-300 text-sm w-6/6 lg:w-5/6 my-5 mx-auto shadow-xl p-5'>
+                        <div className='block'>
                             <p className='block text-lg font-bold text-gray-700 mb-3'>Course Video</p>
-                            <div className='flex justify-end'>
+                            <div className='flex justify-center'>
                                 <input type="file" name='video' ref={videoInputRef} onChange={handleVideoChange} className='text-md font-semibold text-gray-700 mb-3 gap-1' />
                             </div>
                         </div>
                         {viewVideo ?
                             <div>
-                            <video src={viewVideo} controls alt="Preview" style={{ maxWidth: '300px', maxHeight: '200px', margin: "20px auto", borderRadius: '10px' }} />
+                            <video src={viewVideo} controls alt="Preview"  className='storage-prop' />
                             </div>:
-                            <div style={{ width: '300px', height: '200px', margin: '20px auto', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', border: '1px solid #a855f7', borderRadius: '10px' }}>
+                            <div className='alter-prop'>
                                 <FaVideo className='text-2xl' />
                                 <p className='text-lg'>No Video Uploaded</p>
                             </div>

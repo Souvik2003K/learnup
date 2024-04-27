@@ -73,15 +73,12 @@ export default function Home() {
                     </div>
                     
                     <div className="flex items-center">
-                            { location.pathname !== '/teacher' && location.pathname !== '/student' ?
-                                <Link to={`/${userData[0]?.roles === 'teacher' ? 'teacher' : userData[0]?.roles === 'student' ? 'student' : ''}`} className='mr-5 text-xl'>Go to {userData[0]?.roles === 'teacher' ? 'Teacher' : userData[0]?.roles === 'student' ? 'Student' : ''} Dashboard</Link>
-                                : ''
-                            }
-                            <div className="flex items-center cursor-pointer" onClick={toggleProfile}>
-                                <div className="flex items-center mr-4">
-                                    <img src="https://freesvg.org/img/abstract-user-flat-4.png" alt="Profile Picture" className="w-10 h-10 rounded-full mr-2" />
-                                </div>
+                        
+                        <div className="flex justify-center items-center cursor-pointer" onClick={toggleProfile}>
+                            <div className="flex items-center">
+                                <img src="https://freesvg.org/img/abstract-user-flat-4.png" alt="Profile Picture" className="w-10 h-10 rounded-full mr-2" />
                             </div>
+                        </div>
                     </div>
                 </nav>
 
@@ -90,6 +87,14 @@ export default function Home() {
                         <div className="p-4">
                         <p className="text-gray-800 font-semibold">Hello, {userData[0]?.username}</p>
                         <div className="border-t my-2"></div>
+                        { location.pathname !== '/teacher' && location.pathname !== '/student' ?
+                            <>
+                                <Link to={`/${userData[0]?.roles === 'teacher' ? 'teacher' : userData[0]?.roles === 'student' ? 'student' : ''}`} className='text-gray-800 font-semibold'>{userData[0]?.roles === 'teacher' ? 'Teacher' : userData[0]?.roles === 'student' ? 'Student' : ''} Dashboard</Link>
+                                <div className="border-t my-2"></div>
+                            </>
+                            : ''
+                        }
+                        
                         <button className="text-red-500 hover:text-red-700" onClick={toggleModal}>Logout</button>
                         </div>
                     </div>

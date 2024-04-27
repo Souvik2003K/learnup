@@ -166,38 +166,37 @@ export default function Student() {
         console.log(d.vid_id);
         navigate(`/show-courses/${d.vid_id}`);
     }
-    
-    
+
 
 
     return (
         <div>
             <Home />
-            <div className='container mx-auto my-5'>
-                <div className="grid grid-cols-3 gap-4">
+            <div className='container mx-auto my-5 px-5'>
+                <div className="grid-layout-3">
                     {blogs.length > 0 ? blogs.filter((blog) => {
                         if (blog.is_published === true) {
                             return blog;
                         }
                     }).map((data, key) => {
                         const isPaid = pays?.find((pay) => pay.bought_by === auth?.currentUser?.email && pay.title === data.title);
-                        return (<>
-                        <div key={key} className="border border-gray-300 rounded-lg shadow-xl p-6">
-                            <div className='flex justify-center'>
-                                <img src={storage.getFilePreview(import.meta.env.VITE_APPWRITE_IMG_STORAGE_ID,data.img_id)} alt={data.title} style={{width: '430px', height: '300', borderRadius: '10px', padding: '10px'}} />
-                            </div>
-                            <p className="text-2xl font-bold my-3">{data.title}</p>
-                            <p className="text-gray-700 my-2 text-center">{data.description.slice(0, 100)}....</p>
-                            {isPaid ? 
-                                (
-                                    <button className="flex justify-center items-center gap-2 bg-purple-500 hover:bg-purple-700 text-white px-4 py-2 mt-4 rounded-lg transition duration-300 w-full text-lg" onClick={()=>{goto(data)}}>continue</button>
-                                ) : (
-                                    <button className="flex justify-center items-center gap-2 bg-purple-500 hover:bg-purple-700 text-white px-4 py-2 mt-4 rounded-lg transition duration-300 w-full text-lg" onClick={()=>{handlepayement(data)}}><FaLock /><p>Buy for</p><p className='flex justify-center items-center'><PiCurrencyInr /><p>{data.price}</p></p></button>
-                                )
-                            }
-                        </div>
-                        </>
-                        
+                        return (
+                            <>
+                                <div key={key} className="border border-gray-300 rounded-lg shadow-xl mx-5 p-5">
+                                    <div className='flex justify-center'>
+                                        <img src={storage.getFilePreview(import.meta.env.VITE_APPWRITE_IMG_STORAGE_ID,data.img_id)} alt={data.title} style={{width: '430px', height: '300', borderRadius: '10px', padding: '10px'}} />
+                                    </div>
+                                    <p className="text-2xl font-bold my-3">{data.title}</p>
+                                    <p className="text-gray-700 my-2 text-center">{data.description.slice(0, 100)}....</p>
+                                    {isPaid ? 
+                                        (
+                                            <button className="flex justify-center items-center gap-2 bg-purple-500 hover:bg-purple-700 text-white px-4 py-2 mt-4 rounded-lg transition duration-300 w-full text-lg" onClick={()=>{goto(data)}}>continue</button>
+                                        ) : (
+                                            <button className="flex justify-center items-center gap-2 bg-purple-500 hover:bg-purple-700 text-white px-4 py-2 mt-4 rounded-lg transition duration-300 w-full text-lg" onClick={()=>{handlepayement(data)}}><FaLock /><p>Buy for</p><p className='flex justify-center items-center'><PiCurrencyInr /><p>{data.price}</p></p></button>
+                                        )
+                                    }
+                                </div>
+                            </>
                         )
                     })
                     : <div>Loading....</div>}

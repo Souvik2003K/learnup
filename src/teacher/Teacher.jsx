@@ -315,16 +315,14 @@ export default function Teacher() {
     return (
         <div>
             <Home />
-            <div style={{width: '40%', margin: '30px auto'}}>
-                <button style={{padding: '40px'}} className='bg-purple-100 border border-dashed border-gray-700 rounded-lg w-full font-bold text-xl'>
+            <div className='w-4/6 mx-auto my-5 lg:w-3/6 xl:w-3/6'>
+                <button style={{padding: '35px'}} className='bg-purple-100 border border-dashed border-gray-700 rounded-lg w-full font-bold text-xl py-5 my-5'>
                     <Link to='/add-course'>Add Course + </Link>
                 </button>
             </div>
             <div className="overflow-x-auto">
                 <table className="table-auto border-collapse" style={{width: '70%', margin: '20px auto'}}>
-                    <thead 
-                    // className='text-xl border-b border-black'
-                    >
+                    <thead>
                         <tr>
                             <th className="px-4 py-2">Course Title</th>
                             <th className="px-4 py-2">Price</th>
@@ -337,7 +335,7 @@ export default function Teacher() {
                             return (
                                 <tr key={index}>
                                     <td className="border px-4 py-2">{blog.title}</td>
-                                    <td className="border px-4 py-2 flex justify-center items-center"><PiCurrencyInr />{blog.price}</td>
+                                    <td className="border px-4 py-2">Rs.{blog.price}</td>
                                     <td className="border px-4 py-2"><span>{blog.is_published === true ? 'Published' : 'Draft'}</span></td>
                                     <td className="border px-4 py-2">
                                         <button onClick={(e) => openModal(index, e)}>

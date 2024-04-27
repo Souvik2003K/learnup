@@ -73,33 +73,34 @@ export default function Login() {
 
     return (
         <div className='bg-purple-500 h-screen flex align-middle'>
-            <div className='bg-white w-100 mx-auto my-auto p-3 py-5 rounded-xl'>
-                <div className="w-30 flex align-middle justify-center">
+            <div className='bg-white w-80 md:w-6/6 lg:w-4/6 xl:w-4/6 2xl:w-3/6 mx-auto my-auto py-5 px-3 rounded-xl'>
+                <div className="w-30 my-2 flex align-middle justify-center">
                     <img src={logo} alt="Logo" className="w-8 h-8 rounded-full mr-2" />
                     <p className='text-center text-purple-500 text-xl font-bold'>Welcome to Learn-Up</p>
                 </div>
                 {err &&
-                    <div className='w-3/6 mx-auto my-3'>
+                    <div className='w-60 mx-auto my-2'>
                         <Alert icon={<CheckIcon fontSize="inherit" />} severity="error">
-                            <p className='font-bold' >{err}</p>
+                            <p className='font-bold'>{err}</p>
                         </Alert>
                     </div>
                 }
-                <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr'}}>
-                    <div className='mx-auto '>
+                <div className='grid-layout'>
+                    <div className='py-3 px-4 mx-0 lg:mx-auto'>
                     <p className='text-purple-700 text-lg font-medium'>Sign Up</p>
                         <form onSubmit={sign}>
                             <label htmlFor="username" className='block text-sm font-bold text-gray-700 mt-2 mb-1'>Username</label>
-                            <input type="text" placeholder="example2003K" value={username} onChange={(e)=>{setUsername(e.target.value)}} className='block border border-gray-300 w-80 rounded p-2 text-sm' />
+                            <input type="text" placeholder="example2003K" value={username} onChange={(e)=>{setUsername(e.target.value)}} className='block border border-gray-300 rounded p-2 text-md w-full lg:w-80' />
                             
                             <label htmlFor="email" className='block text-sm font-bold text-gray-700 mt-4 mb-1'>Email</label>
-                            <input type="email" placeholder="you@example.com" value={email} onChange={(e)=>{setEmail(e.target.value)}} className='block border border-gray-300 text-sm w-80 p-2 rounded' />
+                            <input type="email" placeholder="you@example.com" value={email} onChange={(e)=>{setEmail(e.target.value)}} className='block border border-gray-300 rounded p-2 text-md w-full lg:w-80' />
                             
                             <label htmlFor="password" className='block text-sm font-bold text-gray-700 mt-4 mb-1'>Password</label>
-                            <input type="password" placeholder="enter 6 character or more" value={password} onChange={(e)=>{setPassword(e.target.value)}} className='block border border-gray-300 w-80 rounded p-2 text-sm' />
+                            <input type="password" placeholder="enter 6 character or more" value={password} onChange={(e)=>{setPassword(e.target.value)}} className='block border border-gray-300 rounded p-2 text-md w-full lg:w-80' />
 
-                            <label htmlFor="role" className='block text-sm font-bold text-gray-700 mt-4 mb-1'>Role</label>
+                            <label htmlFor="role" className='block text-md font-bold text-gray-700 mt-4 mb-1'>Role</label>
                             <Select
+                                className='w-full lg:w-80'
                                 defaultValue={selectedOption}
                                 onChange={setSelectedOption}
                                 options={options}
@@ -107,7 +108,7 @@ export default function Login() {
                             />
 
                             <div>
-                                <button className='bg-purple-500 hover:bg-purple-700 text-white font-bold w-80 my-4 py-2 px-4 rounded'>Get started</button>
+                                <button className='bg-purple-500 hover:bg-purple-700 text-white font-bold w-full my-4 py-2 px-4 rounded'>Get started</button>
                             </div>
 
                             <div className='text-center'>
@@ -115,7 +116,7 @@ export default function Login() {
                             </div>
                         </form>
                     </div>
-                    <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                    <div className='hidden lg:flex justify-center items-center'>
                         <img src={logoImg} style={{width: '400px', maxWidth: '1900px'}} />
                     </div>
                 </div>

@@ -4,8 +4,6 @@ import Home from '../Home';
 import { Player, ControlBar } from 'video-react';
 import 'video-react/dist/video-react.css';
 
-
-
 import { useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 
@@ -62,12 +60,12 @@ export default function ShowCourses() {
     return (
         <div>
             <Home />
-            <div style={{ width: '1200px', height: '700px', margin: '0 auto', marginTop: '30px', marginBottom: '10px' }}>
+            <div style={{ width: '80%', margin: '0 auto', marginTop: '30px', marginBottom: '20px' }}>
                 <Player src={storage.getFileView(import.meta.env.VITE_APPWRITE_VID_STORAGE_ID,value)}>
                     <ControlBar autoHide={false} className="my-class" />
                 </Player>
             </div>
-            <div style={{maxWidth: '1200px', margin: '10px auto'}}>
+            <div style={{ width: '80%', margin: '10px auto'}}>
                 {blogs.length > 0 ? blogs.filter((blog) => {
                             if (blog.is_published === true && blog.vid_id === value) {
                                 return blog;
@@ -75,7 +73,6 @@ export default function ShowCourses() {
                         }).map((data, key) => {
                             return (<>
                             <div key={key} className="">
-                            
                                 <p className="text-2xl font-bold my-5">A Course on {data.title}</p>
                                 <div className='border border-gray-300 rounded-lg shadow-xl p-6 my-4'>
                                     <p className="text-2xl font-bold my-3">Description - </p>

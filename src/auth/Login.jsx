@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { auth, firestore } from '../config/firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { collection } from "firebase/firestore";
@@ -61,39 +61,39 @@ export default function Login() {
 
     return (
         <div className='bg-purple-500 h-screen flex align-middle'>
-            <div className='bg-white w-100 mx-auto my-auto p-3 py-5 rounded-xl'>
+            <div className='bg-white w-80 md:w-6/6 lg:w-4/6 xl:w-4/6 2xl:w-3/6 mx-auto my-auto px-3 py-5 rounded-xl'>
                 <div className="w-30 flex align-middle justify-center">
                     <img src={logo} alt="Logo" className="w-8 h-8 rounded-full mr-2" />
                     <p className='text-center text-purple-500 text-xl font-bold'>Welcome to Learn-Up</p>
                 </div>
                 {err &&
-                    <div className='w-60 mx-auto my-3'>
+                    <div className='w-60 mx-auto my-2'>
                         <Alert icon={<CheckIcon fontSize="inherit" />} severity="error">
                             <p className='font-bold' >{err}</p>
                         </Alert>
                     </div>
                 }
-                <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr'}}>
-                    <div className='mx-auto '>
-                    <p className='text-purple-700 text-lg font-medium'>Sign In</p>
+                <div className='grid-layout'>
+                    <div className='py-3 px-4 mx-0 lg:mx-auto'>
+                    <p className='text-purple-700 text-lg font-medium my-2'>Sign In</p>
                     <p className='font-normal'>to continue to Learn-Up</p>
-                        <form onSubmit={sign}>
-                            <label htmlFor="email" className='block text-sm font-bold text-gray-700 mt-4 mb-1'>Email</label>
-                            <input type="email" placeholder="you@example.com" value={email} onChange={(e)=>{setEmail(e.target.value)}} className='block border border-gray-300 text-sm w-80 p-2 rounded' />
-                            
-                            <label htmlFor="password" className='block text-sm font-bold text-gray-700 mt-4 mb-1'>Password</label>
-                            <input type="password" placeholder="enter 6 character or more" value={password} onChange={(e)=>{setPassword(e.target.value)}} className='block border border-gray-300 w-80 rounded p-2 text-sm' />
+                    <form onSubmit={sign}>
+                        <label htmlFor="email" className='block text-sm font-bold text-gray-700 mt-4 mb-1'>Email</label>
+                        <input type="email" placeholder="you@example.com" value={email} onChange={(e)=>{setEmail(e.target.value)}} className='block border border-gray-300 text-md p-2 rounded w-full lg:w-80' />
+                        
+                        <label htmlFor="password" className='block text-sm font-bold text-gray-700 mt-4 mb-1'>Password</label>
+                        <input type="password" placeholder="enter 6 character or more" value={password} onChange={(e)=>{setPassword(e.target.value)}} className='block border border-gray-300 rounded p-2 text-md w-full lg:w-80' />
 
-                            <div>
-                                <button className='bg-purple-500 hover:bg-purple-700 text-white font-bold w-80 my-4 py-2 px-4 rounded'>Continue</button>
-                            </div>
+                        <div>
+                            <button className='bg-purple-500 hover:bg-purple-700 text-white font-bold w-full my-4 py-2 px-4 rounded'>Continue</button>
+                        </div>
 
-                            <div className='text-center'>
-                                <Link to='/signup' className='text-purple-500 underline'>No Account ? Sign up</Link>
-                            </div>
-                        </form>
+                        <div className='text-center'>
+                            <Link to='/signup' className='text-purple-500 underline'>No Account ? Sign up</Link>
+                        </div>
+                    </form>
                     </div>
-                    <div>
+                    <div className='to-hide'>
                         <img src={logoImg} style={{width: '400px', maxWidth: '1900px'}} />
                     </div>
                 </div>
