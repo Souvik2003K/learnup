@@ -8,6 +8,9 @@ import { auth, firestore } from '../config/firebase';
 
 import Home from '../Home';
 
+import Alert from '@mui/material/Alert';
+import CheckIcon from '@mui/icons-material/Check';
+
 import { MdPublish } from "react-icons/md";
 import { CiCamera } from "react-icons/ci";
 import { FaVideo } from "react-icons/fa";
@@ -31,6 +34,8 @@ function AddCourse() {
     
     const [userData, setUserData] = useState([]);
     const [currentUser, setCurrentUser] = useState(null);
+
+    const [err, setErr] = useState('');
 
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged(user => {
@@ -103,7 +108,13 @@ function AddCourse() {
     const submit = async (e) =>{
         e.preventDefault();
         if(title === '' && desc === '' && price === 0){
-            alert('Please dont keep title, desc or price blank');
+            setErr('Please dont keep Title, Description or Price blank');
+        }
+        if(title !== '' && desc !== '' && price !== 0 && video !== null && image === null){
+            setErr('Please add a thumbnail image for the course');
+        }
+        if(title !== '' && desc !== '' && price !== 0 && image !== null && video === null){
+            setErr('Please add a video for the course');
         }
         else{
             const imgResponse = await new Promise((resolve, reject) => {
@@ -168,11 +179,20 @@ function AddCourse() {
                 <div>
                     <p className='text-3xl font-bold'>Course Setup</p>
                 </div>
-                <div className='flex '>
+                
+                <div className='flex'>
                     <button onClick={submit} style={{display: 'flex', alignItems: 'center'}} className='border border-purple-500 hover:bg-purple-100 font-bold my-4 py-2 mx-2 px-4 rounded'><MdPublish className='text-xl' /><p>Save as Draft</p></button>
                     <button onClick={submit} style={{display: 'flex', alignItems: 'center'}} className='bg-purple-500 hover:bg-purple-700 text-white font-bold my-4 py-2 mx-2 px-4 rounded'><MdPublish className='text-xl' /><p>Publish</p></button>
                 </div>
             </div>
+
+            {err &&
+                <div className='w-2/6 mx-auto my-3'>
+                    <Alert icon={<CheckIcon fontSize="inherit" />} severity="error">
+                        <p className='font-bold' >{err}</p>
+                    </Alert>
+                </div>
+            }
             
             <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', maxWidth: '1200px', margin: '0 auto'}}>
                 <div className='w-full mx-auto'>

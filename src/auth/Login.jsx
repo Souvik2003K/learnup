@@ -5,6 +5,8 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 import { collection } from "firebase/firestore";
 import { getDocs, query, where } from "firebase/firestore";
 import { Link, useNavigate } from 'react-router-dom';
+import Alert from '@mui/material/Alert';
+import CheckIcon from '@mui/icons-material/Check';
 import logo from '../Images/logo.png';
 import logoImg from '../Images/log-img.png';
 
@@ -15,13 +17,15 @@ export default function Login() {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    
 
-
-    
+    const [err, setErr] = useState('');
 
     const sign = async (e) => {
         e.preventDefault();
+        if (email === '' || password === '') {
+            setErr('Please fill all the fields');
+            return;
+        }
         try {
             signInWithEmailAndPassword(auth, email, password)
                 .then((userCredential) => {
@@ -34,6 +38,13 @@ export default function Login() {
                 .catch((error) => {
                     const errorCode = error.code;
                     const errorMessage = error.message;
+                    // console.log(errorMessage);
+                    if (error.message.includes('Firebase: Error (auth/invalid-credential)')) {
+                        setErr('Invalid Credentials');
+                    }
+                    else{
+                        console.log(errorMessage);
+                    }
                 });
                 const q = query(collection(firestore, 'users'), where('email', '==', email));
                 const querySnapshot = await getDocs(q);
@@ -42,9 +53,6 @@ export default function Login() {
                 setEmail('');
                 setPassword('');
                 
-            // querySnapshot.forEach((doc) => {
-            //     d.push(doc.data());
-            // });
             
         } catch (error) {
             console.error('err in login',error);
@@ -58,6 +66,13 @@ export default function Login() {
                     <img src={logo} alt="Logo" className="w-8 h-8 rounded-full mr-2" />
                     <p className='text-center text-purple-500 text-xl font-bold'>Welcome to Learn-Up</p>
                 </div>
+                {err &&
+                    <div className='w-60 mx-auto my-3'>
+                        <Alert icon={<CheckIcon fontSize="inherit" />} severity="error">
+                            <p className='font-bold' >{err}</p>
+                        </Alert>
+                    </div>
+                }
                 <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr'}}>
                     <div className='mx-auto '>
                     <p className='text-purple-700 text-lg font-medium'>Sign In</p>

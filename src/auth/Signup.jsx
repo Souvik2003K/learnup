@@ -4,6 +4,8 @@ import { auth, firestore } from '../config/firebase';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { collection, addDoc } from "firebase/firestore";
 import { Link, useNavigate } from 'react-router-dom';
+import Alert from '@mui/material/Alert';
+import CheckIcon from '@mui/icons-material/Check';
 import Select from 'react-select';
 import logo from '../Images/logo.png';
 import logoImg from '../Images/log-img.png';
@@ -23,6 +25,8 @@ export default function Login() {
         { value: 'student', label: 'student' }
     ];
 
+    const [err, setErr] = useState('');
+
 
 
     const roles = selectedOption?.value;
@@ -30,30 +34,38 @@ export default function Login() {
 
     const sign = async (e) => {
         e.preventDefault();
+        if (email === '' || password === '' || username === '' || roles === '') {
+            setErr('Please fill all the fields');
+            return;
+        }
         try {
             await createUserWithEmailAndPassword(auth, email, password)
             // signInWithEmailAndPassword(auth, email, password)
-                .then((userCredential) => {
+                .then(async (userCredential) => {
                     // Signed in 
                     const user = userCredential.user;
                     console.log('signed up');
+                    // Save additional user info to Firestore
+                    await addDoc(collection(firestore, 'users'), {
+                        email,
+                        username,
+                        roles
+                    });
+                    setEmail('');
+                    setUsername('');
+                    setPassword('');
+                    setRole('');
+                    navigate('/login');
                 })
                 .catch((error) => {
                     const errorCode = error.code;
                     const errorMessage = error.message;
-                });
+                    if(error.message.includes('Firebase: Password should be at least 6 characters (auth/weak-password).')){
+                        setErr('Password should be at least 6 characters');
+                    }
 
-            // Save additional user info to Firestore
-            await addDoc(collection(firestore, 'users'), {
-                email,
-                username,
-                roles
-            });
-            setEmail('');
-            setUsername('');
-            setPassword('');
-            setRole('');
-            navigate('/login');
+                    console.log(errorMessage);
+                });
         } catch (error) {
             console.error(error);
         }
@@ -66,6 +78,13 @@ export default function Login() {
                     <img src={logo} alt="Logo" className="w-8 h-8 rounded-full mr-2" />
                     <p className='text-center text-purple-500 text-xl font-bold'>Welcome to Learn-Up</p>
                 </div>
+                {err &&
+                    <div className='w-3/6 mx-auto my-3'>
+                        <Alert icon={<CheckIcon fontSize="inherit" />} severity="error">
+                            <p className='font-bold' >{err}</p>
+                        </Alert>
+                    </div>
+                }
                 <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr'}}>
                     <div className='mx-auto '>
                     <p className='text-purple-700 text-lg font-medium'>Sign Up</p>
