@@ -120,16 +120,25 @@ function AddCourse() {
             const imgResponse = await new Promise((resolve, reject) => {
                 storage.createFile(import.meta.env.VITE_APPWRITE_IMG_STORAGE_ID, ID.unique(), image)
                     .then(resolve)
-                    .catch(reject);
+                    .catch((reject) => {
+                        // console.log(reject.message)
+                        if(reject.message === 'File extension not allowed'){
+                            setErr('File extension not allowed, please upload a image file only');
+                        }
+                    });
             });
             // console.log(imgResponse.$id); // Success
             
             const vidResponse = await new Promise((resolve, reject) => {
                 storage.createFile(import.meta.env.VITE_APPWRITE_VID_STORAGE_ID, ID.unique(), video)
                     .then(resolve)
-                    .catch(reject);
+                    .catch((reject) => {
+                        // console.log(reject.message)
+                        if(reject.message === 'File extension not allowed'){
+                            setErr('File extension not allowed, please upload a video file only');
+                        }
+                    });
             });
-            console.log(price, typeof price); // Success
 
             const newData = {
                 title: title,
@@ -167,7 +176,14 @@ function AddCourse() {
                     console.log("Data submitted successfully!");
                     navigate('/teacher');
                 }, function (error) {
-                    console.log('err in creation of blog',error);
+                    console.log('err in creation of blog',error.message);
+                    if(error.message.includes('Invalid document structure: Attribute "description"')){
+                        setErr('Description should be of 500 length');
+                    }else if(error.messagee.includes('Invalid document structure: Attribute "title"')){
+                        setErr('Title should be of 100 length');
+                    }else if(error.messagee.includes('Invalid document structure: Attribute "price"')){
+                        setErr('Price should be a Number');
+                    }
                 });
         }
     }
@@ -230,7 +246,7 @@ function AddCourse() {
                         {editDesc ?
                             <textarea name="description" cols="50" rows="4" className='block border border-gray-300 w-6/6 mx-auto rounded-md p-3 text-md' value={desc} onChange={(e) => setDesc(e.target.value)} placeholder='Enter Course description here...'></textarea>
                             :
-                            <p className='block text-lg font-bold text-gray-500 my-3 text-center px-3'>{desc}</p>
+                            <p className='block text-lg font-bold text-gray-500 my-3 text-center px-3'>{desc.length > 0 ? desc.slice(0, 120)+'....' : desc}</p>
                         }
                         
                     </div>
