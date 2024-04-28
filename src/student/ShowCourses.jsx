@@ -33,7 +33,9 @@ export default function ShowCourses() {
         let promise = databases.listDocuments(
             import.meta.env.VITE_APPWRITE_DATABASE_ID,
             import.meta.env.VITE_APPWRITE_COURSE_COLLECTION_ID,
-            []
+            [
+                Query.equal('vid_id', value)
+            ]
         );
 
         promise.then(function (response) {
@@ -45,11 +47,11 @@ export default function ShowCourses() {
 
 
     
-    const [isPlaying, setIsPlaying] = useState(false);
+    // const [isPlaying, setIsPlaying] = useState(false);
 
-    const handlePlayPause = () => {
-        setIsPlaying(!isPlaying);
-    };
+    // const handlePlayPause = () => {
+    //     // setIsPlaying(!isPlaying);
+    // };
 
 
     //---------------------
@@ -66,11 +68,7 @@ export default function ShowCourses() {
                 </Player>
             </div>
             <div style={{ width: '80%', margin: '10px auto'}}>
-                {blogs.length > 0 ? blogs.filter((blog) => {
-                            if (blog.is_published === true && blog.vid_id === value) {
-                                return blog;
-                            }
-                        }).map((data, key) => {
+                {blogs.length > 0 ? blogs.map((data, key) => {
                             return (<>
                             <div key={key} className="">
                                 <p className="text-2xl font-bold my-5">A Course on {data.title}</p>

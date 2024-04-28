@@ -9,7 +9,7 @@ import Select from 'react-select';
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { auth, firestore } from '../config/firebase';
 import { PiCurrencyInr } from "react-icons/pi";
-import { PiDotsThreeOutlineVerticalLight } from "react-icons/pi";
+import { CiSettings } from "react-icons/ci";
 import { MdEdit } from "react-icons/md";
 import { MdDelete } from "react-icons/md";
 import { FaVideo } from "react-icons/fa";
@@ -30,6 +30,7 @@ export default function Teacher() {
     const [modalVisible, setModalVisible] = useState(false);
     const [selectedBlog, setSelectedBlog] = useState(null);
     const [modalPosition, setModalPosition] = useState({ x: 0, y: 0 });
+    
 
     const openModal = (index, event) => {
         setSelectedBlog(index);
@@ -47,8 +48,6 @@ export default function Teacher() {
 
 
     const [editable, setEditable] = useState(false);
-
-
     const [update, setUpdate] = useState(false);
     
 
@@ -339,11 +338,11 @@ export default function Teacher() {
                                     <td className="border px-4 py-2"><span>{blog.is_published === true ? 'Published' : 'Draft'}</span></td>
                                     <td className="border px-4 py-2">
                                         <button onClick={(e) => openModal(index, e)}>
-                                            <PiDotsThreeOutlineVerticalLight />
+                                            <CiSettings className='text-xl' />
                                         </button>
                                     </td>
                                     {modalVisible && selectedBlog !== null && (
-                                        <div className="modal bg-white p-5 rounded shadow-lg" style={{ position: 'absolute', top: modalPosition.y-3, left: modalPosition.x-80 }}>
+                                        <div className="modal bg-white p-5 rounded shadow-md" style={{ position: 'absolute', top: modalPosition.y-3, left: modalPosition.x-80 }}>
                                             <div className="modal-content">
                                                 <div className='flex items-center gap-2 mb-2 cursor-pointer' onClick={()=>{setEditable(true); setModalVisible(false);}}><MdEdit /><p className='font-bold'>Edit</p></div>
                                                 <div className='flex items-center gap-2 mt-2 text-red-500 cursor-pointer' onClick={()=>{Delete(blog)}}><MdDelete /><p className='font-bold'>Delete</p></div>

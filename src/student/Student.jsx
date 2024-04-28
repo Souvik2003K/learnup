@@ -163,7 +163,7 @@ export default function Student() {
     }
 
     const goto = (d) => {
-        console.log(d.vid_id);
+        // console.log(d.vid_id);
         navigate(`/show-courses/${d.vid_id}`);
     }
 
