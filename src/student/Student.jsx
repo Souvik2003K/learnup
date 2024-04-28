@@ -182,7 +182,7 @@ export default function Student() {
                         const isPaid = pays?.find((pay) => pay.bought_by === auth?.currentUser?.email && pay.title === data.title);
                         return (
                             <>
-                                <div key={key} className="border border-gray-300 rounded-lg shadow-xl mx-5 p-5">
+                                <div key={key} className="border border-gray-300 rounded-lg shadow-xl mx-5 my-3 p-5">
                                     <div className='flex justify-center'>
                                         <img src={storage.getFilePreview(import.meta.env.VITE_APPWRITE_IMG_STORAGE_ID,data.img_id)} alt={data.title} style={{width: '430px', height: '300', borderRadius: '10px', padding: '10px'}} />
                                     </div>
@@ -213,7 +213,7 @@ export default function Student() {
                 </div>
             }
             <div>
-                <div onClick={()=>{setModal(!modal)}} className='bg-purple-500 text-white font-bold shadow-xl hover:cursor-pointer' style={{padding: '20px', fontSize: '20px', borderRadius: '50%', position: 'fixed', left: '1%', bottom: '1%'}}>Live Session</div>
+                <div onClick={()=>{setModal(!modal)}} className='bg-purple-500 text-white font-bold shadow-xl hover:cursor-pointer texts' style={{borderRadius: '50%', position: 'fixed', left: '1%', bottom: '1%'}}>Live Session</div>
             </div>
         </div>
     )

@@ -343,7 +343,7 @@ export default function Teacher() {
                                         </button>
                                     </td>
                                     {modalVisible && selectedBlog !== null && (
-                                        <div className="modal bg-white p-5 rounded shadow-lg" style={{ position: 'absolute', top: modalPosition.y, left: modalPosition.x }}>
+                                        <div className="modal bg-white p-5 rounded shadow-lg" style={{ position: 'absolute', top: modalPosition.y-3, left: modalPosition.x-80 }}>
                                             <div className="modal-content">
                                                 <div className='flex items-center gap-2 mb-2 cursor-pointer' onClick={()=>{setEditable(true); setModalVisible(false);}}><MdEdit /><p className='font-bold'>Edit</p></div>
                                                 <div className='flex items-center gap-2 mt-2 text-red-500 cursor-pointer' onClick={()=>{Delete(blog)}}><MdDelete /><p className='font-bold'>Delete</p></div>
