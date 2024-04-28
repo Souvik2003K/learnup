@@ -351,7 +351,7 @@ export default function Teacher() {
                                         </div>
                                     )}
                                     {editable && (
-                                        <div className='shadow-lg' style={{position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', backgroundColor: 'white'}}>
+                                        <div className='shadow-lg' style={{position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', backgroundColor: 'white', margin: '40px auto', marginBottom: '40px'}}>
                                             <div className='bg-white shadow-xl'>
                                                 <div className='text-center'>
                                                     <p className='block text-lg font-bold bg-purple-600 text-gray-100 mb-3 p-3'>
@@ -376,9 +376,9 @@ export default function Teacher() {
                                                     </div>
                                                     {viewVideo ?
                                                         <div>
-                                                        <video src={viewVideo} controls alt="Preview" style={{ maxWidth: '300px', maxHeight: '200px', margin: "20px auto", borderRadius: '10px' }} />
+                                                        <video src={viewVideo} controls alt="Preview" className='storage-prop' />
                                                         </div>:
-                                                        <div style={{ width: '300px', height: '200px', margin: '20px auto', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', border: '1px solid #a855f7', borderRadius: '10px' }}>
+                                                        <div className='alter-prop'>
                                                             <FaVideo className='text-2xl' />
                                                             <p className='text-lg'>No Video Uploaded</p>
                                                         </div>

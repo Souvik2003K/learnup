@@ -225,7 +225,7 @@ function AddCourse() {
                         {editTitle ?
                             <input type="text" name='title' className='block border border-gray-300 w-5/6 mx-auto rounded-md p-3 text-md' value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Enter Course title here..." />
                             :
-                            <p className='block text-lg font-bold text-gray-500 mb-3 text-center'>{title}</p>
+                            <p className='block text-lg font-bold text-gray-500 my-3 text-center px-3'>{title}</p>
                         }
                     </div>
                     
