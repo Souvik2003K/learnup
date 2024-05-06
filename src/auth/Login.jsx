@@ -31,6 +31,7 @@ export default function Login() {
                 .then((userCredential) => {
                     // Signed in 
                     const user = userCredential.user;
+                    localStorage.setItem('user', JSON.stringify(user));
                     console.log('signed in');
                     console.log(querySnapshot.docs[0].data().roles);
                     navigate(`/${querySnapshot.docs[0].data().roles}`);
@@ -67,7 +68,7 @@ export default function Login() {
                     <p className='text-center text-purple-500 text-xl font-bold'>Welcome to Learn-Up</p>
                 </div>
                 {err &&
-                    <div className='w-60 mx-auto my-2'>
+                    <div className='w-60 mx-auto mt-2'>
                         <Alert icon={<CheckIcon fontSize="inherit" />} severity="error">
                             <p className='font-bold' >{err}</p>
                         </Alert>
@@ -75,7 +76,7 @@ export default function Login() {
                 }
                 <div className='grid-layout'>
                     <div className='py-3 px-4 mx-0 lg:mx-auto'>
-                    <p className='text-purple-700 text-lg font-medium my-2'>Sign In</p>
+                    <p className='text-purple-700 text-lg font-medium my-1'>Sign In</p>
                     <p className='font-normal'>to continue to Learn-Up</p>
                     <form onSubmit={sign}>
                         <label htmlFor="email" className='block text-sm font-bold text-gray-700 mt-4 mb-1'>Email</label>

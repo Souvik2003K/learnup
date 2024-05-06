@@ -1,7 +1,7 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
-import { auth } from '../config/firebase';
+// import { auth } from '../config/firebase';
 
 export default function Protected(props) {
     const { Component } = props;
@@ -9,7 +9,8 @@ export default function Protected(props) {
     const navigate = useNavigate();
 
     useEffect(()=>{
-        let login = auth?.currentUser;
+        let login = localStorage.getItem('user');
+
         if (!login) {
             navigate('/login');
         }
