@@ -2,13 +2,13 @@ import React from 'react';
 import Home from '../Home';
 import { Link } from 'react-router-dom';
 import { useState, useEffect, useRef } from 'react';
-import { Client, Databases, Query
-    , ID, Storage 
+import { Client, Databases, Query, ID, Storage 
 } from 'appwrite';
 import Select from 'react-select';
+
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { auth, firestore } from '../config/firebase';
-import { PiCurrencyInr } from "react-icons/pi";
+
 import { CiSettings } from "react-icons/ci";
 import { MdEdit } from "react-icons/md";
 import { MdDelete } from "react-icons/md";
@@ -101,9 +101,7 @@ export default function Teacher() {
     let promise = databases.listDocuments(
         import.meta.env.VITE_APPWRITE_DATABASE_ID,
         import.meta.env.VITE_APPWRITE_COURSE_COLLECTION_ID,
-        [
-            Query.equal('uploader_email', userData[0]?.email)
-        ]
+        []
     );
 
     promise.then(function (response) {
@@ -330,7 +328,9 @@ export default function Teacher() {
                         </tr>
                     </thead>
                     <tbody className='text-center'>
-                        {blogs? blogs.map((blog, index) => {
+                        {blogs? blogs.filter((blog) => {
+                            return blog.uploader_email === userData[0]?.email;
+                        }).map((blog, index) => {
                             return (
                                 <tr key={index}>
                                     <td className="border px-4 py-2">{blog.title}</td>
