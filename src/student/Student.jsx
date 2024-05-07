@@ -9,6 +9,8 @@ import { Client, Databases, Query, ID, Storage } from 'appwrite';
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { auth, firestore } from '../config/firebase';
 
+import ReactLoading from "react-loading";
+
 import { FaLock } from "react-icons/fa";
 import { PiCurrencyInr } from "react-icons/pi";
 
@@ -187,6 +189,7 @@ export default function Student() {
                                         <img src={storage.getFilePreview(import.meta.env.VITE_APPWRITE_IMG_STORAGE_ID,data.img_id)} alt={data.title} style={{width: '430px', height: '300', borderRadius: '10px', padding: '10px'}} />
                                     </div>
                                     <p className="text-2xl font-bold my-3">{data.title}</p>
+                                    <p className="text-xl font-semibold my-3">Author - {data.uploader_email[0].toUpperCase()+ data.uploader_email.slice(1)}</p>
                                     <p className="text-gray-700 my-2 text-center">{data.description.slice(0, 100)}....</p>
                                     {isPaid ? 
                                         (
@@ -199,7 +202,11 @@ export default function Student() {
                             </>
                         )
                     })
-                    : <div>Loading....</div>}
+                    : 
+                    <div style={{position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', zIndex: 5}}>
+                        <ReactLoading type="bubbles" color="#a855f7 " height={200} width={100} />
+                    </div>
+                    }
                 </div>
             </div>
             {modal &&

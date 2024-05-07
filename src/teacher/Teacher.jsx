@@ -6,6 +6,8 @@ import { Client, Databases, Query, ID, Storage
 } from 'appwrite';
 import Select from 'react-select';
 
+import ReactLoading from "react-loading";
+
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { auth, firestore } from '../config/firebase';
 
@@ -318,6 +320,7 @@ export default function Teacher() {
                 </button>
             </div>
             <div className="overflow-x-auto">
+                {blogs.length > 0 ?
                 <table className="table-auto border-collapse" style={{width: '70%', margin: '20px auto'}}>
                     <thead>
                         <tr>
@@ -328,8 +331,10 @@ export default function Teacher() {
                         </tr>
                     </thead>
                     <tbody className='text-center'>
-                        {blogs? blogs.filter((blog) => {
-                            return blog.uploader_email === userData[0]?.email;
+                        {blogs?.filter((blog) => {
+                            if (blog.uploader_email === userData[0]?.username) {
+                                return blog;
+                            }
                         }).map((blog, index) => {
                             return (
                                 <tr key={index}>
@@ -406,17 +411,13 @@ export default function Teacher() {
                                 }
                                 </tr>
                             )
-                        }):(
-                            <tr>
-                                <td className="border px-4 py-2">Loading...</td>
-                                <td className="border px-4 py-2">Loading...</td>
-                                <td className="border px-4 py-2">Loading...</td>
-                                <td className="border px-4 py-2">Loading...</td>
-                            </tr>
-                        )}
+                        })}
                     </tbody>
-                </table>
-                
+                </table> : 
+                <div style={{position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', zIndex: 5}}>
+                    <ReactLoading type="bubbles" color="#a855f7 " height={200} width={100} />
+                </div>
+                }
             </div>
         </div>
     )

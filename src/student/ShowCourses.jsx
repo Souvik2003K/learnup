@@ -4,7 +4,7 @@ import Home from '../Home';
 import { Player, ControlBar } from 'video-react';
 import 'video-react/dist/video-react.css';
 
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 
 import { auth, firestore } from '../config/firebase';
@@ -16,7 +16,7 @@ import { Client, Databases, Query, ID, Storage } from 'appwrite';
 export default function ShowCourses() {
 
     const { value } = useParams();
-    // console.log(value);
+    const navigate = useNavigate();
 
     const client = new Client();
 
@@ -43,7 +43,6 @@ export default function ShowCourses() {
     }, []);
 
     const [blogs, setBlogs] = useState([]);
-    const [videos, setVideos] = useState(null);
 
     useEffect(() => {
 
@@ -63,13 +62,20 @@ export default function ShowCourses() {
         });
     }, []);
 
-
+    const [inputText, setInputText] = useState('');
+    const download = () => {
+        const element = document.createElement('a');
+        const file = new Blob([inputText], { type: 'text/plain' });
+        element.href = URL.createObjectURL(file);
+        element.download = 'notes.txt';
+        document.body.appendChild(element);
+        element.click();
+        document.body.removeChild(element);
+    }
     
-    // const [isPlaying, setIsPlaying] = useState(false);
-
-    // const handlePlayPause = () => {
-    //     // setIsPlaying(!isPlaying);
-    // };
+    const test = () => {
+        navigate('/test');
+    }
 
 
     //---------------------
@@ -88,12 +94,35 @@ export default function ShowCourses() {
             <div style={{ width: '80%', margin: '10px auto'}}>
                 {blogs.length > 0 ? blogs.map((data, key) => {
                             return (<>
-                            <div key={key} className="">
-                                <p className="text-2xl font-bold my-5">A Course on {data.title}</p>
+                            <div key={key}>
+                                <div className='flex justify-between items-center'>
+                                    <p className="text-2xl font-bold my-5">A Course on {data.title}</p>
+                                    <button className="flex justify-center items-center gap-2 bg-purple-500 hover:bg-purple-700 text-white px-4 py-2 mt-4 rounded-lg transition duration-300 text-lg" onClick={test}>Taake Test</button>
+                                </div>
                                 <div className='border border-gray-300 rounded-lg shadow-xl p-6 my-4'>
+                                    <div>
+                                        <div className='flex justify-evenly items-center'>
+                                            {/* <p></p> */}
+                                            <p className="text-2xl font-bold my-3">Author - </p>
+                                            <p className="text-xl font-semibold text-gray-700 my-2 ">{data.uploader_email[0].toUpperCase()+ data.uploader_email.slice(1)}</p>
+                                            {/* <p></p> */}
+                                        </div>
+
+                                        <div className='flex justify-evenly items-center'>
+                                            <p className="text-2xl font-bold my-3">Price - </p>
+                                            <p className="text-xl font-semibold text-gray-700 my-2">Rs. {data.price}</p>
+                                        </div>
+                                    </div>
                                     <p className="text-2xl font-bold my-3">Description - </p>
                                     <div style={{maxWidth: '1000px', margin: '0 auto'}}>
                                         <p className="text-gray-700 my-2 text-center">{data.description}....</p>
+                                    </div>
+                                </div>
+                                <div className='border border-gray-300 rounded-lg shadow-xl p-6 my-4'>
+                                    <p className="text-2xl font-bold my-3">Write your notes here - </p>
+                                    <div style={{maxWidth: '1000px', margin: '10px auto'}}>
+                                        <textarea value={inputText} onChange={()=>{setInputText(event.target.value)}} className="w-full h-32 border border-gray-300 rounded-lg p-2" placeholder="notes..."></textarea>
+                                        <button className="flex justify-center items-center gap-2 bg-purple-500 hover:bg-purple-700 text-white px-4 py-2 mt-4 rounded-lg transition duration-300 text-lg" onClick={download}>Save your notes offline</button>
                                     </div>
                                 </div>
                             </div>

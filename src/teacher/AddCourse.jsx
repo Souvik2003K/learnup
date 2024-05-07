@@ -147,7 +147,7 @@ function AddCourse() {
                 img_id: imgResponse?.$id,
                 vid_id: vidResponse?.$id,
                 is_published: e.target.textContent === 'Publish' ? true : false,
-                uploader_email: userData.length > 0 ? (userData[0].email) : auth?.currentUser?.email
+                uploader_email: userData[0]?.username
             };
         
                 // course DB

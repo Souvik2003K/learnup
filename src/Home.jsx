@@ -82,11 +82,11 @@ export default function Home() {
                         </div>
                     </div>
                 </nav>
-
+                
                 {isProfileOpen && (
                     <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg z-10">
                         <div className="p-4">
-                        <p className="text-gray-800 font-semibold">Hello, {userData[0]?.username}</p>
+                        <p className="text-gray-800 font-semibold">Hello, {userData[0]?.username[0].toUpperCase() + userData[0]?.username.slice(1)}</p>
                         <div className="border-t my-2"></div>
                         { location.pathname !== '/teacher' && location.pathname !== '/student' ?
                             <>
