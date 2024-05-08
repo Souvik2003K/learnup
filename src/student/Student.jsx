@@ -186,10 +186,11 @@ export default function Student() {
                             <>
                                 <div key={key} className="border border-gray-300 rounded-lg shadow-xl mx-5 my-3 p-5">
                                     <div className='flex justify-center'>
-                                        <img src={storage.getFilePreview(import.meta.env.VITE_APPWRITE_IMG_STORAGE_ID,data.img_id)} alt={data.title} style={{width: '430px', height: '300', borderRadius: '10px', padding: '10px'}} />
+                                        <img src={storage.getFilePreview(import.meta.env.VITE_APPWRITE_IMG_STORAGE_ID,data.img_id)} alt={data.title} style={{width: '430px', height: '250px', borderRadius: '10px', padding: '10px'}} />
                                     </div>
                                     <p className="text-2xl font-bold my-3">{data.title}</p>
                                     <p className="text-xl font-semibold my-3">Author - {data.uploader_email[0].toUpperCase()+ data.uploader_email.slice(1)}</p>
+                                    <p className="text-xl font-semibold my-3">Category - {data.category ? data.category : 'None Category'}</p>
                                     <p className="text-gray-700 my-2 text-center">{data.description.slice(0, 100)}....</p>
                                     {isPaid ? 
                                         (

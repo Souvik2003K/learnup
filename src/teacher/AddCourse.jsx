@@ -8,6 +8,8 @@ import { auth, firestore } from '../config/firebase';
 
 import Home from '../Home';
 
+import Select from 'react-select';
+
 import Alert from '@mui/material/Alert';
 import CheckIcon from '@mui/icons-material/Check';
 
@@ -71,6 +73,20 @@ function AddCourse() {
     const [price, setPrice] = useState(0);
     const [image, setImage] = useState(null);
     const [video, setVideo] = useState(null);
+    const [selectedOption, setSelectedOption] = useState(null);
+    
+    const options = [
+        { value: 'Web Development', label: 'Web Development' },
+        { value: 'Data Analytics', label: 'Data Analytics' },
+        { value: 'Cyber Security', label: 'Cyber Security' },
+        { value: 'Artificial Intelligence', label: 'Artificial Intelligence' },
+        { value: 'Robotics', label: 'Robotics' },
+        { value: 'Embedded Systems', label: 'Embedded Systems' },
+        { value: 'Cooking', label: 'Cooking' },
+        { value: 'Dancing', label: 'Dancing' },
+        { value: 'Singing', label: 'Singing' },
+        { value: 'Core CS', label: 'Core CS' }
+    ];
 
     const [viewImage, setViewImage] = useState(null);
     const [viewVideo, setViewVideo] = useState(null);
@@ -146,6 +162,7 @@ function AddCourse() {
                 price: Number(price),
                 img_id: imgResponse?.$id,
                 vid_id: vidResponse?.$id,
+                category: selectedOption.value,
                 is_published: e.target.textContent === 'Publish' ? true : false,
                 uploader_email: userData[0]?.username
             };
@@ -288,6 +305,19 @@ function AddCourse() {
                         }
                     </div>
 
+                    <div className='bg-purple-100 p-5 rounded w-6/6 lg:w-5/6 my-5 mx-auto shadow-xl'>
+                        <div className='flex justify-between items-center'>
+                            <p className='block text-lg font-bold text-gray-700 mb-3'>Course Category</p>
+                            <Select
+                                className='w-full lg:w-80'
+                                defaultValue={selectedOption}
+                                onChange={setSelectedOption}
+                                options={options}
+                                placeholder='Select the Category'
+                            />
+                        </div>
+                    </div>
+
                     <div className='bg-purple-100 rounded block border border-gray-300 text-sm w-6/6 lg:w-5/6 my-5 mx-auto shadow-xl p-5'>
                         <div className='block'>
                             <p className='block text-lg font-bold text-gray-700 mb-3'>Course Video</p>
@@ -297,7 +327,7 @@ function AddCourse() {
                         </div>
                         {viewVideo ?
                             <div>
-                            <video src={viewVideo} controls alt="Preview"  className='storage-prop' />
+                            <video src={viewVideo} controls alt="Preview" className='storage-prop' />
                             </div>:
                             <div className='alter-prop'>
                                 <FaVideo className='text-2xl' />

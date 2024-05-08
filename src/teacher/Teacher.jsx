@@ -153,7 +153,7 @@ export default function Teacher() {
             const newData = {
                 description: desc,
                 is_published: selectedOption ? (selectedOption?.value === 'publish' ? true : false) : doc.is_published,
-                // vid_id: promise1?.$id
+                category: "Data Analytics"
             }
     
             // course DB
@@ -354,9 +354,10 @@ export default function Teacher() {
                                             </div>
                                         </div>
                                     )}
+                                    {/* Edit Box */}
                                     {editable && (
-                                        <div className='shadow-lg' style={{position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', backgroundColor: 'white', margin: '40px auto', marginBottom: '40px'}}>
-                                            <div className='bg-white shadow-xl'>
+                                        <div style={{position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', backgroundColor: 'white', margin: '40px auto', marginBottom: '40px'}}>
+                                            <div className='bg-white shadow-md'>
                                                 <div className='text-center'>
                                                     <p className='block text-lg font-bold bg-purple-600 text-gray-100 mb-3 p-3'>
                                                         {blog.title}
@@ -381,7 +382,7 @@ export default function Teacher() {
                                                     {viewVideo ?
                                                         <div>
                                                         <video src={viewVideo} controls alt="Preview" className='storage-prop' />
-                                                        </div>:
+                                                        </div> :
                                                         <div className='alter-prop'>
                                                             <FaVideo className='text-2xl' />
                                                             <p className='text-lg'>No Video Uploaded</p>
