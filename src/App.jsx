@@ -28,3 +28,20 @@ function App() {
 }
 
 export default App
+
+
+/*
+
+{
+  "course": "Advance Excel",
+  "question": "How long is an IPv6 address?",
+  "answer": "128 bits",
+  "options": [
+    "32 bits",
+    "64 bits",
+    "128 bits",
+    "128 bytes"
+  ]
+},
+
+*/

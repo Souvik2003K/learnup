@@ -1,4 +1,3 @@
-import React from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { auth, firestore } from './config/firebase';

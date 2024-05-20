@@ -1,13 +1,11 @@
-import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
 
 import Home from '../Home';
 import { Client, Databases, Query, ID, Storage } from 'appwrite';
 
-import { collection, getDocs, query, where } from "firebase/firestore";
-import { auth, firestore } from '../config/firebase';
+import { auth } from '../config/firebase';
 
 import ReactLoading from "react-loading";
 
@@ -28,35 +26,11 @@ export default function Student() {
     const [blogs, setBlogs] = useState([]);
     const [pays, setPays] = useState([]);
 
-    const [userData, setUserData] = useState([]);
-    const [currentUser, setCurrentUser] = useState(null);
 
     const [modal, setModal] = useState(false);
 
     const navigate = useNavigate();
 
-
-    useEffect(() => {
-        const unsubscribe = auth.onAuthStateChanged(user => {
-            setCurrentUser(user);
-        });
-        // console.log(unsubscribe);
-        return unsubscribe;
-    }, []);
-
-    useEffect(() => {
-        const unsubscribe = auth.onAuthStateChanged(async (user) => {
-            if (user) {
-                const QuerySnapshot = await getDocs(query(collection(firestore, "users"), where("email", "==", currentUser?.email)));
-                const d = [];
-                QuerySnapshot.forEach((doc) => {
-                    d.push(doc.data());
-                });
-                setUserData(d);
-            }
-        });
-        return unsubscribe;
-    }, []);
 
     // course DB
     let promise = databases.listDocuments(
@@ -67,7 +41,7 @@ export default function Student() {
 
     promise.then(function (response) {
         setBlogs(response.documents);
-    }, function (error) {
+    }, function () {
         // console.log('err',error);
     });
 
@@ -118,7 +92,7 @@ export default function Student() {
                     purchase
                     );
                 
-                    promise.then(function (response) {
+                    promise.then(function () {
                         // console.log(response);
                         // alert("Data submitted successfully!");
                     }, function (error) {
@@ -139,7 +113,7 @@ export default function Student() {
                 purchase
                 );
             
-                promise.then(function (response) {
+                promise.then(function () {
                     // console.log(response);
                     // alert("Data submitted successfully!");
                 }, function (error) {

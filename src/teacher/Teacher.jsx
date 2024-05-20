@@ -1,8 +1,7 @@
-import React from 'react';
 import Home from '../Home';
 import { Link } from 'react-router-dom';
 import { useState, useEffect, useRef } from 'react';
-import { Client, Databases, Query, ID, Storage 
+import { Client, Databases, Query, Storage 
 } from 'appwrite';
 import Select from 'react-select';
 
@@ -46,11 +45,10 @@ export default function Teacher() {
     const [blogs, setBlogs] = useState([]);
 
     const [userData, setUserData] = useState([]);
-    const [currentUser, setCurrentUser] = useState(null);
+    // const [currentUser, setCurrentUser] = useState(null);
 
 
     const [editable, setEditable] = useState(false);
-    const [update, setUpdate] = useState(false);
     
 
     const videoInputRef = useRef(null);
@@ -77,13 +75,13 @@ export default function Teacher() {
     };
 
 
-    useEffect(() => {
-        const unsubscribe = auth.onAuthStateChanged(user => {
-            setCurrentUser(user);
-        });
-        // console.log(unsubscribe);
-        return unsubscribe;
-    }, []);
+    // useEffect(() => {
+    //     const unsubscribe = auth.onAuthStateChanged(user => {
+    //         setCurrentUser(user);
+    //     });
+    //     // console.log(unsubscribe);
+    //     return unsubscribe;
+    // }, []);
 
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged(async (user) => {

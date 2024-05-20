@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { Client, Databases, ID, Storage } from 'appwrite';
 
@@ -47,12 +47,12 @@ function AddCourse() {
         return unsubscribe;
     }, []);
 
-    // console.log('curr',currentUser?.email);
+    
 
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged(async (user) => {
             if (user) {
-                const QuerySnapshot = await getDocs(query(collection(firestore, "users"), where("email", "==", currentUser?.email)));
+                const QuerySnapshot = await getDocs(query(collection(firestore, "users"), where("email", "==", auth?.currentUser?.email)));
                 const d = [];
                 QuerySnapshot.forEach((doc) => {
                     d.push(doc.data());
@@ -66,7 +66,6 @@ function AddCourse() {
     // console.log(currentDate.toString());
     const navigate = useNavigate();
 
-    const [allImg, setAllImg] = useState('');
 
     const [title, setTitle] = useState('');
     const [desc, setDesc] = useState('');
@@ -121,6 +120,7 @@ function AddCourse() {
 
 
 
+
     const submit = async (e) =>{
         e.preventDefault();
         if(title === '' && desc === '' && price === 0){
@@ -133,19 +133,18 @@ function AddCourse() {
             setErr('Please add a video for the course');
         }
         else{
-            const imgResponse = await new Promise((resolve, reject) => {
+            const imgResponse = await new Promise((resolve) => {
                 storage.createFile(import.meta.env.VITE_APPWRITE_IMG_STORAGE_ID, ID.unique(), image)
                     .then(resolve)
                     .catch((reject) => {
-                        // console.log(reject.message)
                         if(reject.message === 'File extension not allowed'){
                             setErr('File extension not allowed, please upload a image file only');
                         }
                     });
             });
-            // console.log(imgResponse.$id); // Success
+            console.log('image done');
             
-            const vidResponse = await new Promise((resolve, reject) => {
+            const vidResponse = await new Promise((resolve) => {
                 storage.createFile(import.meta.env.VITE_APPWRITE_VID_STORAGE_ID, ID.unique(), video)
                     .then(resolve)
                     .catch((reject) => {
@@ -155,6 +154,7 @@ function AddCourse() {
                         }
                     });
             });
+            console.log('video done');
 
             const newData = {
                 title: title,
@@ -175,7 +175,7 @@ function AddCourse() {
                 newData
                 );
             
-                promise.then(function (response) {
+                promise.then(function () {
                     // console.log(response);
                     setTitle("");
                     setDesc("");

@@ -39,35 +39,38 @@ export default function Login() {
             return;
         }
         try {
-            await createUserWithEmailAndPassword(auth, email, password)
-            // signInWithEmailAndPassword(auth, email, password)
-                .then(async (userCredential) => {
-                    // Signed in 
-                    const user = userCredential.user;
-                    console.log('signed up');
-                    // Save additional user info to Firestore
-                    await addDoc(collection(firestore, 'users'), {
-                        email,
-                        username,
-                        roles
-                    });
-                    setEmail('');
-                    setUsername('');
-                    setPassword('');
-                    setRole('');
-                    navigate('/login');
-                })
-                .catch((error) => {
-                    const errorCode = error.code;
-                    const errorMessage = error.message;
-                    if(error.message.includes('Firebase: Password should be at least 6 characters (auth/weak-password).')){
-                        setErr('Password should be at least 6 characters');
-                    }
+            // Create user with email and password
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            const user = userCredential.user;
+            console.log('signed up');
 
-                    console.log(errorMessage);
-                });
+            // Save additional user info to Firestore
+            await addDoc(collection(firestore, 'users'), {
+                email,
+                username,
+                roles
+            });
+
+            // Clear the input fields and navigate to login page
+            setEmail('');
+            setUsername('');
+            setPassword('');
+            setRole('');
+            navigate('/login');
         } catch (error) {
             console.error(error);
+
+            if (error.message.includes('Firebase: Password should be at least 6 characters (auth/weak-password).')) {
+                setErr('Password should be at least 6 characters');
+            } else if (error.message.includes('Firebase: Error (auth/email-already-in-use)')) {
+                setErr('Email already in use');
+            } else if (error.message.includes('Firebase: Error (auth/invalid-email)')) {
+                setErr('Invalid email');
+            } else if (error.code === 'permission-denied') {
+                setErr('Insufficient permissions to create user data.');
+            } else {
+                setErr('An error occurred. Please try again later.');
+            }
         }
     }
 

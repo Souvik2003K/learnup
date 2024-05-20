@@ -1,9 +1,7 @@
-import React from 'react';
 import { useState } from 'react';
 import { auth, firestore } from '../config/firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { collection } from "firebase/firestore";
-import { getDocs, query, where } from "firebase/firestore";
+import { getDocs, query, where, collection } from "firebase/firestore";
 import { Link, useNavigate } from 'react-router-dom';
 import Alert from '@mui/material/Alert';
 import CheckIcon from '@mui/icons-material/Check';
@@ -27,34 +25,25 @@ export default function Login() {
             return;
         }
         try {
-            signInWithEmailAndPassword(auth, email, password)
-                .then((userCredential) => {
-                    // Signed in 
-                    const user = userCredential.user;
-                    localStorage.setItem('user', JSON.stringify(user));
-                    console.log('signed in');
-                    console.log(querySnapshot.docs[0].data().roles);
-                    navigate(`/${querySnapshot.docs[0].data().roles}`);
-                })
-                .catch((error) => {
-                    const errorCode = error.code;
-                    const errorMessage = error.message;
-                    // console.log(errorMessage);
-                    if (error.message.includes('Firebase: Error (auth/invalid-credential)')) {
-                        setErr('Invalid Credentials');
-                    }
-                    else{
-                        console.log(errorMessage);
-                    }
-                });
-                const q = query(collection(firestore, 'users'), where('email', '==', email));
-                const querySnapshot = await getDocs(q);
-                console.log(querySnapshot.docs[0].data().roles);
-                navigate(`/${querySnapshot.docs[0].data().roles}`);
-                setEmail('');
-                setPassword('');
-                
-            
+            const userCredential = await signInWithEmailAndPassword(auth, email, password);
+            const user = userCredential.user;
+            localStorage.setItem('user', JSON.stringify(user));
+            console.log('signed in');
+
+            // Fetch user role from Firestore
+            console.log('email->', email);
+            const q = query(collection(firestore, 'users'), where('email', '==', email));
+            const querySnapshot = await getDocs(q);
+            if (querySnapshot.empty) {
+                throw new Error('No user found with this email');
+            }
+            const userData = querySnapshot.docs[0].data();
+            console.log('role', userData?.roles);
+
+            // Navigate to user's role-based route
+            navigate(`/${userData?.roles}`);
+            setEmail('');
+            setPassword('');
         } catch (error) {
             console.error('err in login',error);
         }
