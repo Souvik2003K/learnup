@@ -237,7 +237,7 @@ export default function Teacher() {
 
         promise1.then(function (response) {
             console.log(response); // Success
-            alert('Video Deleted Successfully');
+            // alert('Image Deleted Successfully');
         }, function (error) {
             console.log(error); // Failure
         });
@@ -250,15 +250,15 @@ export default function Teacher() {
 
         promise2.then(function (response) {
             console.log(response); // Success
-            alert('Video Deleted Successfully');
+            // alert('Image Deleted Successfully');
         }, function (error) {
             console.log(error); // Failure
         });
 
         // for deleting purchase record
         const promise3 = databases.listDocuments(
-            '6620847f50c884a3aca6', 
-            '662084c45586bacc51b1',
+            import.meta.env.VITE_APPWRITE_DATABASE_ID, 
+            import.meta.env.VITE_APPWRITE_PURCHASE_COLLECTION_ID,
             [
                 Query.equal('title', doc.title)
             ]
@@ -268,8 +268,8 @@ export default function Teacher() {
             console.log(response); // Success
             response.documents.forEach((d) => {
                 const promise5 = databases.deleteDocument(
-                    '6620847f50c884a3aca6', 
-                    '662084c45586bacc51b1', 
+                    import.meta.env.VITE_APPWRITE_DATABASE_ID, 
+                    import.meta.env.VITE_APPWRITE_PURCHASE_COLLECTION_ID, 
                     d.$id
                 );
                 promise5.then(function (response) {
@@ -284,8 +284,8 @@ export default function Teacher() {
 
         // for deleting the document
         const promise4 = databases.deleteDocument(
-            '6620847f50c884a3aca6', 
-            '662084bc1cf4e261f7d1', 
+            import.meta.env.VITE_APPWRITE_DATABASE_ID, 
+            import.meta.env.VITE_APPWRITE_COURSE_COLLECTION_ID, 
             doc.$id
         );
 
@@ -318,7 +318,8 @@ export default function Teacher() {
                 </button>
             </div>
             <div className="overflow-x-auto">
-                {blogs.length > 0 ?
+                {blogs ?
+                blogs.length > 0 ? 
                 <table className="table-auto border-collapse" style={{width: '70%', margin: '20px auto'}}>
                     <thead>
                         <tr>
@@ -413,9 +414,11 @@ export default function Teacher() {
                         })}
                     </tbody>
                 </table> : 
+                '' :
                 <div style={{position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', zIndex: 5}}>
                     <ReactLoading type="bubbles" color="#a855f7 " height={200} width={100} />
                 </div>
+                
                 }
             </div>
         </div>

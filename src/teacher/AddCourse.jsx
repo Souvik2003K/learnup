@@ -8,6 +8,8 @@ import { auth, firestore } from '../config/firebase';
 
 import Home from '../Home';
 
+import ReactLoading from "react-loading";
+
 import Select from 'react-select';
 
 import Alert from '@mui/material/Alert';
@@ -35,19 +37,11 @@ function AddCourse() {
     const videoInputRef = useRef(null);
     
     const [userData, setUserData] = useState([]);
-    const [currentUser, setCurrentUser] = useState(null);
 
     const [err, setErr] = useState('');
 
-    useEffect(() => {
-        const unsubscribe = auth.onAuthStateChanged(user => {
-            setCurrentUser(user);
-        });
-        // console.log(unsubscribe);
-        return unsubscribe;
-    }, []);
+    const [loading, setLoading] = useState(false);
 
-    
 
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged(async (user) => {
@@ -133,27 +127,31 @@ function AddCourse() {
             setErr('Please add a video for the course');
         }
         else{
-            const imgResponse = await new Promise((resolve) => {
-                storage.createFile(import.meta.env.VITE_APPWRITE_IMG_STORAGE_ID, ID.unique(), image)
-                    .then(resolve)
-                    .catch((reject) => {
-                        if(reject.message === 'File extension not allowed'){
-                            setErr('File extension not allowed, please upload a image file only');
-                        }
-                    });
-            });
+            setLoading(true);
+            const [imgResponse, vidResponse] = await Promise.all([
+                new Promise((resolve, reject) => {
+                    storage.createFile(import.meta.env.VITE_APPWRITE_IMG_STORAGE_ID, ID.unique(), image)
+                        .then(resolve)
+                        .catch((error) => {
+                            if (error.message === 'File extension not allowed') {
+                                setErr('File extension not allowed, please upload an image file only');
+                            }
+                            reject(error);
+                        });
+                }),
+                new Promise((resolve, reject) => {
+                    storage.createFile(import.meta.env.VITE_APPWRITE_VID_STORAGE_ID, ID.unique(), video)
+                        .then(resolve)
+                        .catch((error) => {
+                            if (error.message === 'File extension not allowed') {
+                                setErr('File extension not allowed, please upload a video file only');
+                            }
+                            reject(error);
+                        });
+                })
+            ]);
+        
             console.log('image done');
-            
-            const vidResponse = await new Promise((resolve) => {
-                storage.createFile(import.meta.env.VITE_APPWRITE_VID_STORAGE_ID, ID.unique(), video)
-                    .then(resolve)
-                    .catch((reject) => {
-                        // console.log(reject.message)
-                        if(reject.message === 'File extension not allowed'){
-                            setErr('File extension not allowed, please upload a video file only');
-                        }
-                    });
-            });
             console.log('video done');
 
             const newData = {
@@ -177,6 +175,7 @@ function AddCourse() {
             
                 promise.then(function () {
                     // console.log(response);
+                    setLoading(false);
                     setTitle("");
                     setDesc("");
                     setPrice("");
@@ -224,6 +223,12 @@ function AddCourse() {
                     </Alert>
                 </div>
             }
+
+            {loading && 
+                <div style={{position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', zIndex: 5}}>
+                    <ReactLoading type="bubbles" color="#a855f7 " height={200} width={100} />
+                </div>
+                    }
             
             <div className='grid-layout-2'>
                 <div className='w-5/6 mx-auto'>
@@ -314,6 +319,7 @@ function AddCourse() {
                                 onChange={setSelectedOption}
                                 options={options}
                                 placeholder='Select the Category'
+                                required
                             />
                         </div>
                     </div>
