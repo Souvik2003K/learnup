@@ -21,7 +21,7 @@ function App() {
         <Route path='/add-course' element={<Protected Component={AddCourse} />}></Route>
         <Route path='/student' element={<Protected Component={Student} />}></Route>
         <Route path='/show-courses/:value' element={<Protected Component={ShowCourses} />}></Route>
-        <Route path='/test' element={<Protected Component={Test} />}></Route>
+        <Route path='/test/:value' element={<Protected Component={Test} />}></Route>
       </Routes>
     </Router>
   )

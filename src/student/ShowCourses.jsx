@@ -72,8 +72,8 @@ export default function ShowCourses() {
         document.body.removeChild(element);
     }
     
-    const test = () => {
-        navigate('/test');
+    const test = (email, title) => {
+        navigate(`/test/${email}&&${title}`);
     }
 
 
@@ -96,7 +96,7 @@ export default function ShowCourses() {
                             <div key={key}>
                                 <div className='flex justify-between items-center'>
                                     <p className="text-2xl font-bold my-5">A Course on {data.title}</p>
-                                    <button className="flex justify-center items-center gap-2 bg-purple-500 hover:bg-purple-700 text-white px-4 py-2 mt-4 rounded-lg transition duration-300 text-lg" onClick={test}>Taake Test</button>
+                                    <button className="flex justify-center items-center gap-2 bg-purple-500 hover:bg-purple-700 text-white px-4 py-2 mt-4 rounded-lg transition duration-300 text-lg" onClick={()=>{test(data.uploader_email, data.title)}}>Take Test</button>
                                 </div>
                                 <div className='border border-gray-300 rounded-lg shadow-xl p-6 my-4'>
                                     <div>
@@ -120,7 +120,7 @@ export default function ShowCourses() {
                                 <div className='border border-gray-300 rounded-lg shadow-xl p-6 my-4'>
                                     <p className="text-2xl font-bold my-3">Write your notes here - </p>
                                     <div style={{maxWidth: '1000px', margin: '10px auto'}}>
-                                        <textarea value={inputText} onChange={()=>{setInputText(event.target.value)}} className="w-full h-32 border border-gray-300 rounded-lg p-2" placeholder="notes..."></textarea>
+                                        <textarea value={inputText} onChange={(event)=>{setInputText(event.target.value)}} className="w-full h-32 border border-gray-300 rounded-lg p-2" placeholder="notes..."></textarea>
                                         <button className="flex justify-center items-center gap-2 bg-purple-500 hover:bg-purple-700 text-white px-4 py-2 mt-4 rounded-lg transition duration-300 text-lg" onClick={download}>Save your notes offline</button>
                                     </div>
                                 </div>

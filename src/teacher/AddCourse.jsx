@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 import { Client, Databases, ID, Storage } from 'appwrite';
 
@@ -20,6 +21,7 @@ import { CiCamera } from "react-icons/ci";
 import { FaVideo } from "react-icons/fa";
 import { MdEdit } from "react-icons/md";
 import { PiCurrencyInr } from "react-icons/pi";
+// import { IoAddOutline } from "react-icons/io5";
 
 function AddCourse() {
 
@@ -41,6 +43,17 @@ function AddCourse() {
     const [err, setErr] = useState('');
 
     const [loading, setLoading] = useState(false);
+
+    const [quizArr, setQuizArr] = useState({
+        question: '',
+        answer: '',
+        options: []
+    });
+    const [allQ, setAllQ] = useState({
+        Quiz: [],
+        course: '',
+        uploader: ''
+    });
 
 
     useEffect(() => {
@@ -112,6 +125,20 @@ function AddCourse() {
         }
     };
 
+    const [showModal, setShowModal] = useState(false);
+    const addQues = () => {
+        setShowModal(true);
+    }
+
+    const submitQues = () => {
+        setAllQ({...allQ, Quiz: [...allQ.Quiz, quizArr]});
+        setQuizArr({
+            question: '',
+            answer: '',
+            options: []
+        })
+        setShowModal(false);
+    }
 
 
 
@@ -128,6 +155,24 @@ function AddCourse() {
         }
         else{
             setLoading(true);
+            allQ.course = title;
+            allQ.uploader = userData[0]?.email;
+            await axios.post(import.meta.env.VITE_QUIZ_ADD_API, 
+            allQ,
+            { headers: { 
+                'Content-Type': 'application/json'
+                } }
+            ).then(() => {
+                console.log('Questions added');
+                setAllQ({
+                    Quiz: [],
+                    course: '',
+                    uploader: ''
+                });
+            }).catch(error => {
+                console.log('err in form',allQ);
+                console.error('Error:', error);
+            });
             const [imgResponse, vidResponse] = await Promise.all([
                 new Promise((resolve, reject) => {
                     storage.createFile(import.meta.env.VITE_APPWRITE_IMG_STORAGE_ID, ID.unique(), image)
@@ -206,7 +251,9 @@ function AddCourse() {
     }
 
     return (
-        <form onSubmit={submit}>
+        <form 
+        onSubmit={submit}
+        >
             <Home />
             <div className='flex-layout'>
                 <p className='text-3xl font-bold'>Course Setup</p>
@@ -220,7 +267,7 @@ function AddCourse() {
             {err &&
                 <div className='w-80 lg:w-2/6 mx-auto my-2'>
                     <Alert icon={<CheckIcon fontSize="inherit" />} severity="error">
-                        <p className='font-bold' >{err}</p>
+                        <p className='font-bold'>{err}</p>
                     </Alert>
                 </div>
             }
@@ -231,7 +278,7 @@ function AddCourse() {
                 </div>
                     }
             
-            <div className='grid-layout-2'>
+            <div className='grid-layout-3'>
                 <div className='w-5/6 mx-auto'>
                     <div className='bg-purple-100 p-5 rounded w-6/6 lg:w-5/6 my-5 mx-auto shadow-xl'>
                         <div className='flex justify-between items-center'>
@@ -344,8 +391,74 @@ function AddCourse() {
                     </div>
                 </div>
 
-            </div>
+                <div className='w-5/6 mx-auto'>
+                    <div className='text-center bg-purple-100 p-5 rounded w-6/6 lg:w-5/6 my-5 mx-auto shadow-xl'>
+                        {/* mapping the questions and options from allQ */}
+                        <div className=''>
+                            {allQ.Quiz.length > 0 ? 
+                            <>
+                            <p className='block text-lg font-bold text-gray-700 mb-3'>Questions</p>
+                            <div>
+                                {allQ.Quiz.map((q, index) => {
+                                    return (
+                                        <div key={index} className='p-3 rounded my-3'>
+                                            <p className='text-lg font-bold text-gray-700 mb-3 text-center'>{index+1}. {q.question}?</p>
+                                            <div className='flex justify-around items-center'>
+                                                <p className='text-md font-bold text-gray-500 mb-3 text-center'>A. {q.options[0]}</p>
+                                                <p className='text-md font-bold text-gray-500 mb-3 text-center'>B. {q.options[1]}</p>
+                                            </div>
+                                            <div className='flex justify-around items-center'>
+                                                <p className='text-md font-bold text-gray-500 mb-3 text-center'>C. {q.options[2]}</p>
+                                                <p className='text-md font-bold text-gray-500 mb-3 text-center'>D. {q.options[3]}</p>
+                                            </div>
+                                            <p className='text-md font-bold text-gray-500 mb-3 text-center'>Answer : {q.answer}</p>
+                                        </div>
+                                    )
+                                })}
+                            </div></> :   
+                            <div className='text-center my-4'> No Questions Yet </div>
+                            }
+                        </div>
+                    <div style={{display: 'flex', justifyContent: 'center'}}>
+                        <input type="button" onClick={addQues} className='text-md font-semibold bg-purple-500 hover:bg-purple-700 text-white mb-3 flex items-center gap-1 py-2 px-4 rounded' value="Add Questions" />
+                    </div>
+                    </div>
+                </div>
 
+                {/* modal for quesArr and quesEach input */}
+                {showModal &&
+                <div style={{position: 'fixed', left: '50%', top: '50%', transform: 'translate(-50%, -50%)', background: 'white', zIndex: 5, boxShadow: '0px 0px 10px grey'}} className='w-5/6 lg:w-2/6'>
+                    <div className='flex justify-end'>
+                        <input type='button' onClick={()=>{setShowModal(false)}} className='text-md font-semibold border border-purple-500 text-purple-500 m-3 flex items-center gap-1 py-2 px-4 rounded' value='X' />
+                    </div>
+
+                    <p className='text-lg font-bold text-gray-700 w-5/6 mx-auto mb-3'>Question :</p>
+                    <div className='flex justify-center my-5'>
+                        <input type='text' name='question' className='block border border-gray-300 w-5/6 mx-auto rounded-md p-3 text-md' value={quizArr.question} onChange={(e) => setQuizArr({...quizArr, question: e.target.value})} placeholder='Enter Question here...' />
+                    </div>
+
+                    <div className='my-5'>
+                        <p className='text-lg font-bold text-gray-700 w-5/6 mx-auto mb-3'>Options :</p>
+                        <input type='text' name='option1' className='block border border-gray-300 w-5/6 mx-auto rounded-md p-3 text-md my-3' value={quizArr.options[0]} onChange={(e) => setQuizArr({...quizArr, options: [e.target.value, quizArr.options[1], quizArr.options[2], quizArr.options[3]]})} placeholder='Option 1' />
+
+                        <input type='text' name='option2' className='block border border-gray-300 w-5/6 mx-auto rounded-md p-3 text-md my-3' value={quizArr.options[1]} onChange={(e) => setQuizArr({...quizArr, options: [quizArr.options[0], e.target.value, quizArr.options[2], quizArr.options[3]]})} placeholder='Option 2' />
+
+                        <input type='text' name='option3' className='block border border-gray-300 w-5/6 mx-auto rounded-md p-3 text-md my-3' value={quizArr.options[2]} onChange={(e) => setQuizArr({...quizArr, options: [quizArr.options[0], quizArr.options[1], e.target.value, quizArr.options[3]]})} placeholder='Option 3' />
+
+                        <input type='text' name='option4' className='block border border-gray-300 w-5/6 mx-auto rounded-md p-3 text-md my-3' value={quizArr.options[3]} onChange={(e) => setQuizArr({...quizArr, options: [quizArr.options[0], quizArr.options[1], quizArr.options[2], e.target.value]})} placeholder='Option 4' />
+                    </div>
+
+                    <p className='text-lg font-bold text-gray-700 w-5/6 mx-auto mb-3'>Answer among the options : </p>
+                    <div className='flex justify-center my-5'>
+                        <input type='text' name='answer' className='block border border-gray-300 w-5/6 mx-auto rounded-md p-3 text-md' value={quizArr.answer} onChange={(e) => setQuizArr({...quizArr, answer: e.target.value})} placeholder='Enter Answer here...' />
+                    </div>
+
+                    <input type='button' onClick={submitQues} className='text-md font-semibold bg-purple-500 hover:bg-purple-700 text-white mb-3 flex items-center gap-1 py-2 px-4 rounded mx-auto' value="Add" />
+
+                </div>
+                }
+
+            </div>
 
 
         </form>
