@@ -331,7 +331,7 @@ export default function Teacher() {
                     </thead>
                     <tbody className='text-center'>
                         {blogs?.filter((blog) => {
-                            if (blog.uploader_email === userData[0]?.username) {
+                            if (blog.uploader_email === userData[0]?.email) {
                                 return blog;
                             }
                         }).map((blog, index) => {
