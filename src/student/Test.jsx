@@ -11,7 +11,6 @@ export default function Test() {
     const [email, title] = value.split('&&');
 
     const [testQuestions, setTestQuestions] = useState([]);
-    // const [selectedAnswers, setSelectedAnswers] = useState('');
 
     useEffect(() => {
         axios.get(import.meta.env.VITE_QUIZ_SHOW_API)
@@ -25,9 +24,7 @@ export default function Test() {
     }, []);
 
 
-    const [selectedAnswers, setSelectedAnswers] = useState(
-        Array(testQuestions.length).fill('')
-    );
+    const [selectedAnswers, setSelectedAnswers] = useState([]);
 
     const [score, setScore] = useState(0);
 
@@ -36,11 +33,16 @@ export default function Test() {
         updatedAnswers[questionIndex] = option;
         setSelectedAnswers(updatedAnswers);
 
-        // Increase the score if the selected option is correct
-        if (option == answer) {
-            setScore(prevScore => prevScore += 1);
-        }
+        // Calculate the score correctly
+        let newScore = 0;
+        updatedAnswers.forEach((selectedOption, idx) => {
+            if (selectedOption === testQuestions[idx]?.answer) {
+                newScore += 1;
+            }
+        });
+        setScore(newScore);
     };
+
 
     const submit = () => {
         if(score < testQuestions.length) {
@@ -58,12 +60,9 @@ export default function Test() {
             <Home />
             <div>
                 <h2 className='text-2xl text-center my-3'>Quiz on <strong>{title}</strong></h2>
-                {testQuestions?.map((eachQ, index) => (
-                    <div key={index}>
+                {testQuestions?.map((eachQ, Qindex) => (
+                    <div key={Qindex}>
                         <h3 style={{
-                            // border: '1px solid black',
-                            // backgroundColor: 'lightblue',
-                            // width: '30%',
                             fontSize: '20px',
                             fontWeight: 600,
                             margin: '10px auto',
@@ -71,26 +70,24 @@ export default function Test() {
                         }}
                         className='w-5/6 lg:w-2/6'
                         >
-                            {index+1}. {eachQ.question} ?
+                            {Qindex+1}. {eachQ.question} ?
                         </h3>
                         <ul>
-                        {/* Map the options with styling and turn the color to green if the selected option matches with the answer otherwise turn the color to red */}
-                        {eachQ.options.map((option, index) => (
+                        {eachQ.options.map((option, Oindex) => (
                             <li
-                                key={index}
+                                key={Oindex}
                                 style={{
                                     border: '1px solid black',
-                                    // width: '30%',
                                     margin: '10px auto',
                                     padding: '10px',
-                                    cursor: 'pointer',
+                                    cursor: selectedAnswers[Qindex] ? 'not-allowed' : 'pointer',
                                     backgroundColor: 
-                                        selectedAnswers[index] === option 
+                                        selectedAnswers[Qindex] === option 
                                             ? (option === eachQ.answer ? 'lightgreen' : 'lightcoral') 
                                             : 'white',
                                 }}
                                 className='w-5/6 lg:w-2/6'
-                                onClick={() => handleOptionClick(index, eachQ.answer, option)}
+                                onClick={() => handleOptionClick(Qindex, eachQ.answer, option)}
                             >
                                 {option}
                             </li>
@@ -98,7 +95,6 @@ export default function Test() {
                         </ul>
                     </div>
                 ))}
-                {/* <button onClick={submit}>Submit</button> */}
                 <div className='flex justify-center my-3'>
                     <button className="flex justify-center items-center gap-2 bg-purple-500 hover:bg-purple-700 text-white px-4 py-2 mt-4 rounded-lg transition duration-300 text-lg" 
                     onClick={submit}
