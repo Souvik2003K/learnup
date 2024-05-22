@@ -15,6 +15,9 @@ export default function Test() {
     useEffect(() => {
         axios.get(import.meta.env.VITE_QUIZ_SHOW_API)
         .then(response => {
+            console.log('got the data');
+            console.log(response.data.data);
+            console.log(email, title);
             const filteredData = response.data.data.filter(item => item.uploader === email && item.course === title);
             const quizQuestions = filteredData.flatMap(item => item.Quiz);
             setTestQuestions(quizQuestions);
@@ -59,7 +62,7 @@ export default function Test() {
         <div>
             <Home />
             <div>
-                <h2 className='text-2xl text-center my-3'>Quiz on <strong>{title}</strong></h2>
+                <p className='text-2xl text-center my-3 underline'>Quiz on <strong>{title}</strong></p>
                 {testQuestions?.map((eachQ, Qindex) => (
                     <div key={Qindex}>
                         <h3 style={{

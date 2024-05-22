@@ -66,8 +66,6 @@
     background-color: white;
 }
 
-
-
 @media (max-width: 1028px){
     .grid-layout{
         grid-template-columns: 1fr;
