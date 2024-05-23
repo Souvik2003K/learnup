@@ -2,7 +2,7 @@ import './App.css';
 import { useEffect, useState } from 'react';
 import { auth, firestore } from './config/firebase';
 import { getDocs, query, where, collection } from "firebase/firestore";
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './auth/Login';
 import Signup from './auth/Signup';
 import Teacher from './teacher/Teacher';
@@ -42,7 +42,7 @@ function App() {
           <>
             <Route path='/teacher' element={<Protected Component={Teacher} />}></Route>
             <Route path='/add-course' element={<Protected Component={AddCourse} />}></Route>
-            <Route path='/*' element={<Protected Component={Teacher} />}></Route>
+            <Route path='/*' element={<Navigate to='/teacher' replace />}></Route>
           </>
         }
         {userData[0]?.roles === 'student' && 
@@ -50,7 +50,7 @@ function App() {
             <Route path='/student' element={<Protected Component={Student} />}></Route>
             <Route path='/show-courses/:value' element={<Protected Component={ShowCourses} />}></Route>
             <Route path='/test/:value' element={<Protected Component={Test} />}></Route>
-            <Route path='/*' element={<Protected Component={Teacher} />}></Route>
+            <Route path='/*' element={<Navigate to='/student' replace />}></Route>
           </>
         }
       </Routes>

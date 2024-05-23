@@ -10,17 +10,16 @@ export default function Home() {
     const location = useLocation();
 
     const [userData, setUserData] = useState([]);
-    const [currentUser, setCurrentUser] = useState(null);
+    // const [currentUser, setCurrentUser] = useState(null);
 
-    
 
-    useEffect(() => {
-        const unsubscribe = auth.onAuthStateChanged(user => {
-            setCurrentUser(user);
-        });
-        // console.log(unsubscribe);
-        return unsubscribe;
-    }, []);
+    // useEffect(() => {
+    //     const unsubscribe = auth.onAuthStateChanged(user => {
+    //         setCurrentUser(user);
+    //     });
+    //     // console.log(unsubscribe);
+    //     return unsubscribe;
+    // }, []);
 
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged(async (user) => {
