@@ -16,6 +16,7 @@ export default function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
+
     const [err, setErr] = useState('');
 
     const sign = async (e) => {
@@ -28,6 +29,7 @@ export default function Login() {
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
             localStorage.setItem('user', JSON.stringify(user));
+            localStorage.setItem('roles', JSON.stringify(user));
             console.log('signed in');
 
             // Fetch user role from Firestore
@@ -48,6 +50,8 @@ export default function Login() {
             console.error('err in login',error);
         }
     }
+
+    
 
     return (
         <div className='bg-purple-500 h-screen flex align-middle'>
