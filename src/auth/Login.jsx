@@ -3,10 +3,11 @@ import { auth, firestore } from '../config/firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { getDocs, query, where, collection } from "firebase/firestore";
 import { Link, useNavigate } from 'react-router-dom';
-import Alert from '@mui/material/Alert';
-import CheckIcon from '@mui/icons-material/Check';
 import logo from '../Images/logo.png';
 import logoImg from '../Images/log-img.png';
+
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 export default function Login() {
@@ -16,13 +17,22 @@ export default function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
+    const notify = (msg) => toast.error(msg, {
+        position: "top-right",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: false,
+        progress: undefined,
+        theme: "light"
+    });
 
-    const [err, setErr] = useState('');
 
     const sign = async (e) => {
         e.preventDefault();
         if (email === '' || password === '') {
-            setErr('Please fill all the fields');
+            notify('Please fill all the fields');
             return;
         }
         try {
@@ -47,26 +57,22 @@ export default function Login() {
             setEmail('');
             setPassword('');
         } catch (error) {
-            console.error('err in login',error);
+            if(error.message.includes('Firebase: Error (auth/invalid-credential)')){
+                notify('Invalid Credentials');
+            }
         }
     }
 
-    
 
     return (
+        <>
+        <ToastContainer />
         <div className='bg-purple-500 h-screen flex align-middle'>
             <div className='bg-white w-80 md:w-6/6 lg:w-4/6 xl:w-4/6 2xl:w-3/6 mx-auto my-auto px-3 py-5 rounded-xl'>
                 <div className="w-30 flex align-middle justify-center">
                     <img src={logo} alt="Logo" className="w-8 h-8 rounded-full mr-2" />
                     <p className='text-center text-purple-500 text-xl font-bold'>Welcome to Learn-Up</p>
                 </div>
-                {err &&
-                    <div className='w-60 mx-auto mt-2'>
-                        <Alert icon={<CheckIcon fontSize="inherit" />} severity="error">
-                            <p className='font-bold' >{err}</p>
-                        </Alert>
-                    </div>
-                }
                 <div className='grid-layout'>
                     <div className='py-3 px-4 mx-0 lg:mx-auto'>
                     <p className='text-purple-700 text-lg font-medium my-1'>Sign In</p>
@@ -93,5 +99,6 @@ export default function Login() {
                 </div>
             </div>
         </div>
+        </>
     )
 }

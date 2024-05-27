@@ -13,8 +13,8 @@ import ReactLoading from "react-loading";
 
 import Select from 'react-select';
 
-import Alert from '@mui/material/Alert';
-import CheckIcon from '@mui/icons-material/Check';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import { MdPublish } from "react-icons/md";
 import { CiCamera } from "react-icons/ci";
@@ -40,7 +40,17 @@ function AddCourse() {
     
     const [userData, setUserData] = useState([]);
 
-    const [err, setErr] = useState('');
+    // const [err, notify] = useState('');
+    const notify = (msg) => toast.error(msg, {
+        position: "top-right",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: false,
+        progress: undefined,
+        theme: "light"
+    });
 
     const [loading, setLoading] = useState(false);
 
@@ -145,13 +155,13 @@ function AddCourse() {
     const submit = async (e) =>{
         e.preventDefault();
         if(title === '' && desc === '' && price === 0){
-            setErr('Please dont keep Title, Description or Price blank');
+            notify('Please dont keep Title, Description or Price blank');
         }
         if(title !== '' && desc !== '' && price !== 0 && video !== null && image === null){
-            setErr('Please add a thumbnail image for the course');
+            notify('Please add a thumbnail image for the course');
         }
         if(title !== '' && desc !== '' && price !== 0 && image !== null && video === null){
-            setErr('Please add a video for the course');
+            notify('Please add a video for the course');
         }
         else{
             setLoading(true);
@@ -179,7 +189,7 @@ function AddCourse() {
                         .then(resolve)
                         .catch((error) => {
                             if (error.message === 'File extension not allowed') {
-                                setErr('File extension not allowed, please upload an image file only');
+                                notify('File extension not allowed, please upload an image file only');
                             }
                             reject(error);
                         });
@@ -189,7 +199,7 @@ function AddCourse() {
                         .then(resolve)
                         .catch((error) => {
                             if (error.message === 'File extension not allowed') {
-                                setErr('File extension not allowed, please upload a video file only');
+                                notify('File extension not allowed, please upload a video file only');
                             }
                             reject(error);
                         });
@@ -240,17 +250,19 @@ function AddCourse() {
                 }, function (error) {
                     console.log('err in creation of blog',error.message);
                     if(error.message.includes('Invalid document structure: Attribute "description"')){
-                        setErr('Description should be of 500 length');
+                        notify('Description should be of 500 length');
                     }else if(error.messagee.includes('Invalid document structure: Attribute "title"')){
-                        setErr('Title should be of 100 length');
+                        notify('Title should be of 100 length');
                     }else if(error.messagee.includes('Invalid document structure: Attribute "price"')){
-                        setErr('Price should be a Number');
+                        notify('Price should be a Number');
                     }
                 });
         }
     }
 
     return (
+        <>
+        <ToastContainer />
         <form 
         onSubmit={submit}
         >
@@ -264,13 +276,6 @@ function AddCourse() {
                 </div>
             </div>
 
-            {err &&
-                <div className='w-80 lg:w-2/6 mx-auto my-2'>
-                    <Alert icon={<CheckIcon fontSize="inherit" />} severity="error">
-                        <p className='font-bold'>{err}</p>
-                    </Alert>
-                </div>
-            }
 
             {loading && 
                 <div style={{position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', zIndex: 5}}>
@@ -462,6 +467,7 @@ function AddCourse() {
 
 
         </form>
+        </>
     )
 }
 

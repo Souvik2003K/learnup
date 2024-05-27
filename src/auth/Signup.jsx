@@ -4,11 +4,12 @@ import { auth, firestore } from '../config/firebase';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { collection, addDoc } from "firebase/firestore";
 import { Link, useNavigate } from 'react-router-dom';
-import Alert from '@mui/material/Alert';
-import CheckIcon from '@mui/icons-material/Check';
 import Select from 'react-select';
 import logo from '../Images/logo.png';
 import logoImg from '../Images/log-img.png';
+
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Login() {
 
@@ -16,7 +17,7 @@ export default function Login() {
 
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
-    const [role, setRole] = useState('');
+    // const [role, setRole] = useState('');
     const [username, setUsername] = useState('');
 
     const [selectedOption, setSelectedOption] = useState(null);
@@ -25,8 +26,18 @@ export default function Login() {
         { value: 'student', label: 'student' }
     ];
 
-    const [err, setErr] = useState('');
+    // const [err, setErr] = useState('');
 
+    const notify = (msg) => toast.error(msg, {
+        position: "top-right",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: false,
+        progress: undefined,
+        theme: "light"
+    });
 
 
     const roles = selectedOption?.value;
@@ -35,13 +46,14 @@ export default function Login() {
     const sign = async (e) => {
         e.preventDefault();
         if (email === '' || password === '' || username === '' || roles === '') {
-            setErr('Please fill all the fields');
+            notify('Please fill all the fields');
             return;
         }
         try {
             // Create user with email and password
-            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-            const user = userCredential.user;
+            // const userCredential = 
+            await createUserWithEmailAndPassword(auth, email, password);
+            // const user = userCredential.user;
             console.log('signed up');
 
             // Save additional user info to Firestore
@@ -55,39 +67,35 @@ export default function Login() {
             setEmail('');
             setUsername('');
             setPassword('');
-            setRole('');
+            // setRole('');
             navigate('/login');
         } catch (error) {
             console.error(error);
 
             if (error.message.includes('Firebase: Password should be at least 6 characters (auth/weak-password).')) {
-                setErr('Password should be at least 6 characters');
+                notify('Password should be at least 6 characters');
             } else if (error.message.includes('Firebase: Error (auth/email-already-in-use)')) {
-                setErr('Email already in use');
+                notify('Email already in use');
             } else if (error.message.includes('Firebase: Error (auth/invalid-email)')) {
-                setErr('Invalid email');
+                notify('Invalid email');
             } else if (error.code === 'permission-denied') {
-                setErr('Insufficient permissions to create user data.');
+                notify('Insufficient permissions to create user data.');
             } else {
-                setErr('An error occurred. Please try again later.');
+                notify('An error occurred. Please try again later.');
             }
         }
     }
 
     return (
+        <>
+        <ToastContainer />
+        
         <div className='bg-purple-500 h-screen flex align-middle'>
             <div className='bg-white w-80 md:w-6/6 lg:w-4/6 xl:w-4/6 2xl:w-3/6 mx-auto my-auto py-5 px-3 rounded-xl'>
                 <div className="w-30 my-2 flex align-middle justify-center">
                     <img src={logo} alt="Logo" className="w-8 h-8 rounded-full mr-2" />
                     <p className='text-center text-purple-500 text-xl font-bold'>Welcome to Learn-Up</p>
                 </div>
-                {err &&
-                    <div className='w-60 mx-auto my-2'>
-                        <Alert icon={<CheckIcon fontSize="inherit" />} severity="error">
-                            <p className='font-bold'>{err}</p>
-                        </Alert>
-                    </div>
-                }
                 <div className='grid-layout'>
                     <div className='py-3 px-4 mx-0 lg:mx-auto'>
                     <p className='text-purple-700 text-lg font-medium'>Sign Up</p>
@@ -125,5 +133,6 @@ export default function Login() {
                 </div>
             </div>
         </div>
+        </>
     )
 }

@@ -56,7 +56,7 @@ export default function ShowCourses() {
 
         promise.then(function (response) {
             setBlogs(response.documents);
-        }, function (error) {
+        }, function () {
             // console.log('err',error);
         });
     }, []);

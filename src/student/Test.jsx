@@ -3,6 +3,11 @@ import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+import ReactLoading from "react-loading";
+
 export default function Test() {
 
     const { value } = useParams();
@@ -49,21 +54,42 @@ export default function Test() {
 
     const submit = () => {
         if(score < testQuestions.length) {
-            alert(`You didn't passed the test.\nYour score is ${score} out of ${testQuestions.length}`);
-            navigate('/student');
+            toast.error(`You didn't passed the test.\nYour score is ${score} out of ${testQuestions.length}`, {
+                position: "top-right",
+                autoClose: 1000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: false,
+                draggable: false,
+                progress: undefined,
+                theme: "light"
+            });
         } else {
-            alert(`You passed the test.\nYour score is ${score} out of ${testQuestions.length}`);
-            navigate('/student');
+            toast.success(`You passed the test.\nYour score is ${score} out of ${testQuestions.length}`, {
+                position: "top-right",
+                autoClose: 1000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: false,
+                draggable: false,
+                progress: undefined,
+                theme: "light"
+            });
         }
+        setTimeout(() => {
+            navigate('/student');
+        }, 2000);
     }
 
     
     return (
         <div>
             <Home />
+            <ToastContainer />
             <div>
                 <p className='text-2xl text-center my-3 underline'>Quiz on <strong>{title}</strong></p>
-                {testQuestions?.map((eachQ, Qindex) => (
+                {testQuestions ? testQuestions?.map((eachQ, Qindex) => (
+                    <>
                     <div key={Qindex}>
                         <h3 style={{
                             fontSize: '20px',
@@ -97,12 +123,17 @@ export default function Test() {
                         ))}
                         </ul>
                     </div>
-                ))}
+                    
+                </>
+                ))
+                : 
+                <div style={{position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', zIndex: 5}}>
+                        <ReactLoading type="bubbles" color="#a855f7 " height={200} width={100} />
+                    </div>}
+                { testQuestions.length > 0 ? 
                 <div className='flex justify-center my-3'>
-                    <button className="flex justify-center items-center gap-2 bg-purple-500 hover:bg-purple-700 text-white px-4 py-2 mt-4 rounded-lg transition duration-300 text-lg" 
-                    onClick={submit}
-                    >Submit</button>
-                </div>
+                    <button className="flex justify-center items-center gap-2 bg-purple-500 hover:bg-purple-700 text-white px-4 py-2 mt-4 rounded-lg transition duration-300 text-lg" onClick={submit} >Submit</button>
+                </div> : ''}
             </div>
         </div>
     )
