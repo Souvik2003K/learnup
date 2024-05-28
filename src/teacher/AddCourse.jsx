@@ -154,14 +154,17 @@ function AddCourse() {
 
     const submit = async (e) =>{
         e.preventDefault();
-        if(title === '' && desc === '' && price === 0){
-            notify('Please dont keep Title, Description or Price blank');
+        if(title !== '' && desc !== '' && price !== 0 && video === null && image === null){
+            notify('Blank Course cannot be added');
         }
-        if(title !== '' && desc !== '' && price !== 0 && video !== null && image === null){
+        else if(title !== '' && desc !== '' && price !== 0 && video !== null && image === null){
             notify('Please add a thumbnail image for the course');
         }
-        if(title !== '' && desc !== '' && price !== 0 && image !== null && video === null){
+        else if(title !== '' && desc !== '' && price !== 0 && image !== null && video === null){
             notify('Please add a video for the course');
+        }
+        else if(title === '' && desc === '' && price === 0){
+            notify('Please dont keep Title, Description or Price blank');
         }
         else{
             setLoading(true);
@@ -281,7 +284,7 @@ function AddCourse() {
                 <div style={{position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', zIndex: 5}}>
                     <ReactLoading type="bubbles" color="#a855f7 " height={200} width={100} />
                 </div>
-                    }
+            }
             
             <div className='grid-layout-3'>
                 <div className='w-5/6 mx-auto'>
