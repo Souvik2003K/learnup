@@ -8,6 +8,7 @@ import Select from 'react-select';
 import logo from '../Images/logo.png';
 import logoImg from '../Images/log-img.png';
 
+import ReactLoading from 'react-loading';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -19,6 +20,8 @@ export default function Login() {
     const [password, setPassword] = React.useState('');
     // const [role, setRole] = useState('');
     const [username, setUsername] = useState('');
+
+    const [loading, setLoading] = useState(false);
 
     const [selectedOption, setSelectedOption] = useState(null);
     const options = [
@@ -50,6 +53,7 @@ export default function Login() {
             return;
         }
         try {
+            setLoading(true);
             // Create user with email and password
             // const userCredential = 
             await createUserWithEmailAndPassword(auth, email, password);
@@ -64,12 +68,14 @@ export default function Login() {
             });
 
             // Clear the input fields and navigate to login page
+            setLoading(false);
             setEmail('');
             setUsername('');
             setPassword('');
             // setRole('');
             navigate('/login');
         } catch (error) {
+            setLoading(false);
             console.error(error);
 
             if (error.message.includes('Firebase: Password should be at least 6 characters (auth/weak-password).')) {
@@ -119,7 +125,9 @@ export default function Login() {
                             />
 
                             <div>
-                                <button className='bg-purple-500 hover:bg-purple-700 text-white font-bold w-full my-4 py-2 px-4 rounded'>Get started</button>
+                                <button className='bg-purple-500 hover:bg-purple-700 text-white font-bold w-full my-4 py-2 px-4 rounded'>
+                                    {loading ? <div className='flex justify-center items-center'><ReactLoading type="bubbles" color="#fff " height={30} width={30} /></div> : 'Get started'}
+                                    </button>
                             </div>
 
                             <div className='text-center'>

@@ -5,6 +5,7 @@ import { getDocs, query, where, collection } from "firebase/firestore";
 import { Link, useNavigate } from 'react-router-dom';
 import logo from '../Images/logo.png';
 import logoImg from '../Images/log-img.png';
+import ReactLoading from 'react-loading';
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -16,6 +17,8 @@ export default function Login() {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+
+    const [loading, setLoading] = useState(false);
 
     const notify = (msg) => toast.error(msg, {
         position: "top-right",
@@ -36,6 +39,7 @@ export default function Login() {
             return;
         }
         try {
+            setLoading(true);
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
             localStorage.setItem('user', JSON.stringify(user));
@@ -51,12 +55,14 @@ export default function Login() {
             }
             const userData = querySnapshot.docs[0].data();
             console.log('role', userData?.roles);
+            setLoading(false);
 
             // Navigate to user's role-based route
             navigate(`/${userData?.roles}`);
             setEmail('');
             setPassword('');
         } catch (error) {
+            setLoading(false);
             if(error.message.includes('Firebase: Error (auth/invalid-credential)')){
                 notify('Invalid Credentials');
             }
@@ -85,7 +91,9 @@ export default function Login() {
                         <input type="password" placeholder="enter 6 character or more" value={password} onChange={(e)=>{setPassword(e.target.value)}} className='block border border-gray-300 rounded p-2 text-md w-full lg:w-80' />
 
                         <div>
-                            <button className='bg-purple-500 hover:bg-purple-700 text-white font-bold w-full my-4 py-2 px-4 rounded'>Continue</button>
+                            <button className='bg-purple-500 hover:bg-purple-700 text-white font-bold w-full my-4 py-2 px-4 rounded'>
+                                {loading ? <div className='flex justify-center items-center'><ReactLoading type="bubbles" color="#fff " height={30} width={30} /></div> : 'Continue'}
+                            </button>
                         </div>
 
                         <div className='text-center'>
