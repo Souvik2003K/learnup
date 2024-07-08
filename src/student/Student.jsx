@@ -11,6 +11,7 @@ import ReactLoading from "react-loading";
 
 import { FaLock } from "react-icons/fa";
 import { PiCurrencyInr } from "react-icons/pi";
+import { MdClear } from "react-icons/md";
 
 export default function Student() {
     const client = new Client();
@@ -26,6 +27,7 @@ export default function Student() {
     const [blogs, setBlogs] = useState([]);
     const [pays, setPays] = useState([]);
 
+    const [search, setSearch] = useState('');
 
     const [modal, setModal] = useState(false);
 
@@ -148,13 +150,24 @@ export default function Student() {
     return (
         <div>
             <Home />
-            <div className='container mx-auto my-5 px-5'>
+            <div className='mt-3'>
+                <div className='flex justify-center items-center'>
+                    <input type="text" placeholder="Search" value={search} onChange={(e)=>{setSearch(e.target.value)}} className="border border-gray-300 rounded-lg shadow-xl mx-5 my-3 p-3 w-4/6 md:w-1/2" />
+                    {search && <MdClear className='border border-red-500 rounded-xl text-red-500 text-4xl' onClick={()=>{setSearch('')}} />}
+                </div>
+            </div>
+            <div className='container mx-auto my-5 mt-3 px-5'>
                 <div className="grid-layout-3">
                     {blogs.length > 0 ? blogs.filter((blog) => {
                         if (blog.is_published === true) {
                             return blog;
                         }
-                    }).map((data, key) => {
+                    }).filter((blog) => {
+                        if (search === '') {
+                            return blog;
+                        } else if (blog.title.toLowerCase().includes(search.toLowerCase()) || blog.author.toLowerCase().includes(search.toLowerCase()) || blog.category.toLowerCase().includes(search.toLowerCase())){
+                            return blog;
+                    }}).map((data, key) => {
                         const isPaid = pays?.find((pay) => pay.bought_by === auth?.currentUser?.email && pay.title === data.title);
                         return (
                             <>
