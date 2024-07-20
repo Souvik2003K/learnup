@@ -42,8 +42,9 @@ export default function Login() {
             setLoading(true);
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
-            localStorage.setItem('user', JSON.stringify(user));
-            localStorage.setItem('roles', JSON.stringify(user));
+            // localStorage.setItem('user', JSON.stringify(user));
+            // localStorage.setItem('roles', JSON.stringify(user));
+            
             console.log('signed in');
 
             // Fetch user role from Firestore
