@@ -27,6 +27,9 @@ export default function Student() {
     const [blogs, setBlogs] = useState([]);
     const [pays, setPays] = useState([]);
 
+    const [category, setCategory] = useState('');
+    const filteredBlogs = category ? blogs.filter((blog) => blog.category === category) : blogs;
+
     const [search, setSearch] = useState('');
 
     const [modal, setModal] = useState(false);
@@ -156,11 +159,30 @@ export default function Student() {
                     {search && <MdClear className='border border-red-500 rounded-xl text-red-500 text-4xl' onClick={()=>{setSearch('')}} />}
                 </div>
             </div>
+
+
+            <div className='my-3 flex justify-center gap-3'>
+                {blogs.length > 0 ? <div className='bg-gray-500 text-white py-2 px-4 border rounded-lg cursor-pointer' onClick={()=>{setCategory('')}}>All</div> : ''}
+                {blogs.length > 0 ? blogs.map((blog, i) => {
+                return (
+                    <div key={i}>
+                        <div className='bg-gray-500 text-white py-2 px-4 border rounded-lg cursor-pointer' onClick={()=>{setCategory(blog.category)}}>{blog.category}</div>
+                    </div>
+                )}) : ''}
+            </div>
+
+
+
             <div className='container mx-auto my-5 mt-3 px-5'>
                 <div className="grid-layout-3">
-                    {blogs.length > 0 ? blogs.filter((blog) => {
+                    {filteredBlogs.length > 0 ? filteredBlogs.filter((blog) => {
                         if (blog.is_published === true) {
                             return blog;
+                        }
+                        if (category) {
+                            if (blog.category === category) {
+                                return blog;
+                            }
                         }
                     }).filter((blog) => {
                         if (search === '') {
