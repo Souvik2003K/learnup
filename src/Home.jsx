@@ -56,7 +56,7 @@ export default function Home() {
     const clear = async () => {
         try {
             await signOut(auth);
-            localStorage.removeItem('user');
+            // localStorage.removeItem('user');
             navigate('/login');
         } catch (error) {
             console.error('err in logout',error);
